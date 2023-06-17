@@ -9,3 +9,87 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  user_id             Int              @id @default(autoincrement())
+  user_username       String           @unique
+  user_password       String
+  user_userdiet_plan  UserDietPlan[]
+  user_customizedmeal CustomizedMeal[]
+  user_meal_plan      MealPlan[]
+  user_progress       Progress[]
+}
+
+model BioData {
+  biodata_id       Int      @id @default(autoincrement())
+  biodata_age      String   @unique
+  biodata_email    Int
+  biodata_gender   String
+  biodata_weight   Float
+  biodata_height   Float
+  biodata_activity String
+  biodata_goals    String[]
+}
+
+model DietPlan {
+  dietplan_id                      Int           @id @default(autoincrement())
+  dietplan_name                    String
+  dietplan_description             String
+  dietplan_calorieIntake           Int
+  dietplan_carbohydratesPercentage Float
+  dietplan_proteinsPercentage      Float
+  dietplan_fatsPercentage          Float
+  dietplan_mainMeals               Int
+  dietplan_snacks                  Int
+  dietplan_user_dietPlan           UserDietPlan?
+  dietplan_meal_plan               MealPlan[]
+}
+
+model UserDietPlan {
+  userdietplan_id          Int      @id @default(autoincrement())
+  userdietplan_user        User     @relation(fields: [userdietplan_user_id], references: [user_id], onDelete: Cascade)
+  userdietplan_user_id     Int
+  userdietplan_dietPlan    DietPlan @relation(fields: [userdietplan_dietPlan_Id], references: [dietplan_id], onDelete: Cascade)
+  userdietplan_dietPlan_Id Int      @unique
+}
+
+model Food {
+  food_id              Int              @id @default(autoincrement())
+  food_name            String
+  food_calories        Float
+  food_carbohydrates   Float
+  food_proteins        Float
+  food_fats            Float
+  food_vitamins        String[]
+  food_customized_meal CustomizedMeal[]
+}
+
+model CustomizedMeal {
+  customizedmeal_id            Int       @id @default(autoincrement())
+  customizedmeal_user          User      @relation(fields: [customizedmeal_user_id], references: [user_id], onDelete: Cascade)
+  customizedmeal_user_id       Int
+  customizedmeal_food          Food      @relation(fields: [customizedmeal_food_id], references: [food_id], onDelete: Cascade)
+  customizedmeal_food_id       Int
+  customizedmeal_portion_size  Float
+  customizedmeal_meal_plan     MealPlan? @relation(fields: [customized_meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
+  customized_meal_meal_plan_id Int?
+}
+
+model MealPlan {
+  mealplan_id             Int              @id @default(autoincrement())
+  mealplan_user           User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
+  mealplan_user_id        Int
+  mealplan_diet_plan      DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
+  mealplan_diet_plan_id   Int
+  mealplan_day_of_Week    String
+  mealplan_mealtime       String
+  mealplan_customizedMeal CustomizedMeal[]
+}
+
+model Progress {
+  progress_id           Int      @id @default(autoincrement())
+  progress_user         User     @relation(fields: [progress_user_id], references: [user_id], onDelete: Cascade)
+  progress_user_id      Int
+  progress_weight       Float
+  progress_measurements String[]
+}

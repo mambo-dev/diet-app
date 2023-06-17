@@ -1,7 +1,7 @@
 import { AuthorizedUser, DecodedToken } from "./type";
 import jwt from "jsonwebtoken";
 
-async function verifyAuth(
+export default async function verifyAuth(
   authorizationString: string | undefined
 ): Promise<AuthorizedUser> {
   if (!authorizationString) {
