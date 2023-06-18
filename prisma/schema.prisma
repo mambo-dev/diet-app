@@ -18,7 +18,7 @@ model User {
   user_customizedmeal CustomizedMeal[]
   user_meal_plan      MealPlan[]
   user_progress       Progress[]
-  BioData             BioData?
+  user_bio_data       BioData?
 }
 
 model BioData {
