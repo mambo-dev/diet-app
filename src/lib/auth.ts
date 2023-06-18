@@ -1,3 +1,4 @@
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { AuthorizedUser, DecodedToken } from "./type";
 import jwt from "jsonwebtoken";
 

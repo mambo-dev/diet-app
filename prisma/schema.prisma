@@ -18,12 +18,15 @@ model User {
   user_customizedmeal CustomizedMeal[]
   user_meal_plan      MealPlan[]
   user_progress       Progress[]
+  BioData             BioData?
 }
 
 model BioData {
   biodata_id       Int      @id @default(autoincrement())
-  biodata_age      String   @unique
-  biodata_email    Int
+  biodata_age      Int
+  biodata_user     User     @relation(fields: [biodata_user_id], references: [user_id], onDelete: Cascade)
+  biodata_user_id  Int      @unique
+  biodata_email    String
   biodata_gender   String
   biodata_weight   Float
   biodata_height   Float
