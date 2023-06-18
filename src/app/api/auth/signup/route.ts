@@ -50,6 +50,11 @@ export async function POST(request: NextRequest): Promise<
       data: {
         user_username: username,
         user_password: hash,
+        user_bio_data: {
+          create: {
+            biodata_email: email,
+          },
+        },
       },
     });
 
