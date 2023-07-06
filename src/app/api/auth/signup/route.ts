@@ -68,19 +68,32 @@ export async function POST(request: Request): Promise<
       },
     });
 
-    return NextResponse.json({
-      success: true,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({
-        error: error.issues,
-      });
+      return NextResponse.json(
+        {
+          error: error.issues,
+        },
+        {
+          status: 403,
+        }
+      );
     }
 
-    return NextResponse.json({
-      error: "something went wrong with the server",
-    });
+    return NextResponse.json(
+      {
+        error: "something went wrong with the server",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

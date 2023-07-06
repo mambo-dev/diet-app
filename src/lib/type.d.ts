@@ -13,3 +13,7 @@ export type DecodedToken = {
   iat: number;
   exp: number;
 };
+
+export type HandleError = {
+  message: string | undefined;
+};

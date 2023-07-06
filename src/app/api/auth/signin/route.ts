@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "../../../../lib/prisma";
 import * as argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import cookie from "cookie";
 
 export const signInSchema = z.object({
   username: z.string().min(1, "please provide a username"),
@@ -39,9 +40,14 @@ export async function POST(request: Request): Promise<
     );
 
     if (!passwordMatches) {
-      return NextResponse.json({
-        error: "invalid password or username",
-      });
+      return NextResponse.json(
+        {
+          error: "invalid password or username",
+        },
+        {
+          status: 403,
+        }
+      );
     }
 
     if (!process.env.JWT_SECRET) {
@@ -55,27 +61,43 @@ export async function POST(request: Request): Promise<
       process.env.JWT_SECRET
     );
 
-    let response = NextResponse.next();
-
-    response.cookies.set("access_token", access_token, {
-      path: "/",
-      expires: 7.2e6,
-      sameSite: "strict",
-    });
-
-    return NextResponse.json({
-      success: true,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+      },
+      {
+        headers: {
+          "Set-Cookie": cookie.serialize("access_token", access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== "development",
+            maxAge: 60 * 120,
+            sameSite: "strict",
+            path: "/",
+          }),
+        },
+        status: 200,
+      }
+    );
   } catch (error) {
     console.log(error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({
-        error: error.issues,
-      });
+      return NextResponse.json(
+        {
+          error: error.issues,
+        },
+        {
+          status: 403,
+        }
+      );
     }
 
-    return NextResponse.json({
-      error: "something went wrong with the server",
-    });
+    return NextResponse.json(
+      {
+        error: "something went wrong with the server",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
