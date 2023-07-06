@@ -1,6 +1,7 @@
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { AuthorizedUser, DecodedToken } from "./type";
 import jwt from "jsonwebtoken";
+import { db } from "./prisma";
 
 export default async function verifyAuth(
   authorizationString: string | undefined
@@ -22,7 +23,24 @@ export default async function verifyAuth(
     };
   }
 
+  const authorizedUser = await db.user.findUnique({
+    where: {
+      user_id: decoded.id,
+    },
+  });
+
+  if (!authorizedUser) {
+    return {
+      error: "this account may have been deleted",
+    };
+  }
+
+  const { user_id, user_username } = authorizedUser;
+
   return {
-    username: "Michael",
+    user: {
+      user_id: user_id,
+      username: user_username,
+    },
   };
 }

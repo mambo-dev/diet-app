@@ -21,14 +21,16 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 
-export async function POST(request: NextRequest): Promise<
+export async function POST(request: Request): Promise<
   NextResponse<{
     success?: boolean;
     error?: string | z.ZodIssue[];
   }>
 > {
   try {
-    const { email, password, username } = signUpSchema.parse(request.body);
+    const body = await request.json();
+
+    const { email, password, username } = signUpSchema.parse(body);
 
     const userExists = await db.user.findUnique({
       where: {
@@ -36,9 +38,17 @@ export async function POST(request: NextRequest): Promise<
       },
     });
 
-    if (userExists) {
+    const emailInUse = await db.bioData.findUnique({
+      where: {
+        biodata_email: email,
+      },
+    });
+
+    if (userExists || emailInUse) {
       return NextResponse.json({
-        error: "you already have an account try loggin in instead",
+        error: userExists
+          ? "you already have an account try loggin in instead"
+          : "this email is already in use try different email",
       });
     }
 
@@ -62,6 +72,7 @@ export async function POST(request: NextRequest): Promise<
       success: true,
     });
   } catch (error) {
+    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json({
         error: error.issues,

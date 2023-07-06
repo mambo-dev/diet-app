@@ -22,16 +22,33 @@ model User {
 }
 
 model BioData {
-  biodata_id       Int      @id @default(autoincrement())
-  biodata_age      Int
-  biodata_user     User     @relation(fields: [biodata_user_id], references: [user_id], onDelete: Cascade)
-  biodata_user_id  Int      @unique
-  biodata_email    String   @unique
-  biodata_gender   String
-  biodata_weight   Float
-  biodata_height   Float
-  biodata_activity String
-  biodata_goals    String[]
+  biodata_id                  Int      @id @default(autoincrement())
+  biodata_age                 Int      @default(0)
+  biodata_user                User     @relation(fields: [biodata_user_id], references: [user_id], onDelete: Cascade)
+  biodata_user_id             Int      @unique
+  biodata_email               String   @unique
+  biodata_gender              Gender   @default(male)
+  biodata_weight              Float    @default(0)
+  biodata_desired_calorie     Int      @default(0)
+  biodata_height              Float    @default(0)
+  biodata_activity            Activity @default(sedentary)
+  biodata_goals               String[]
+  biodata_carbohydrates_ratio Int      @default(0)
+  biodata_proteins_ratio      Int      @default(0)
+  biodata_fats_ratio          Int      @default(0)
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum Activity {
+  sedentary
+  lightly_active
+  moderately_active
+  very_active
+  extra_active
 }
 
 model DietPlan {
@@ -79,14 +96,21 @@ model CustomizedMeal {
 }
 
 model MealPlan {
-  mealplan_id             Int              @id @default(autoincrement())
-  mealplan_user           User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
-  mealplan_user_id        Int
-  mealplan_diet_plan      DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
-  mealplan_diet_plan_id   Int
-  mealplan_day_of_Week    String
-  mealplan_mealtime       String
-  mealplan_customizedMeal CustomizedMeal[]
+  mealplan_id                   Int              @id @default(autoincrement())
+  mealplan_user                 User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
+  mealplan_user_id              Int
+  mealplan_diet_plan            DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
+  mealplan_diet_plan_id         Int
+  mealplan_day_of_Week          String
+  mealplan_mealtime             String
+  mealplan_customizedMeal       CustomizedMeal[]
+  mealplan_saved                SavedMealPlan?   @relation(fields: [savedMealPlanSavedmealplan_id], references: [savedmealplan_id])
+  savedMealPlanSavedmealplan_id Int?
+}
+
+model SavedMealPlan {
+  savedmealplan_id Int        @id @default(autoincrement())
+  savedMealPlan    MealPlan[]
 }
 
 model Progress {

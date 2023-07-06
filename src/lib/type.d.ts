@@ -1,5 +1,8 @@
 export type AuthorizedUser = {
-  username?: string;
+  user?: {
+    user_id: number;
+    username: string;
+  };
   error?: string;
 };
 
