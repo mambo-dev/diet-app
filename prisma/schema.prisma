@@ -14,7 +14,7 @@ model User {
   user_id             Int              @id @default(autoincrement())
   user_username       String           @unique
   user_password       String
-  user_userdiet_plan  UserDietPlan[]
+  user_userdiet_plan  UserDietPlan?
   user_customizedmeal CustomizedMeal[]
   user_meal_plan      MealPlan[]
   user_progress       Progress[]
@@ -68,7 +68,7 @@ model DietPlan {
 model UserDietPlan {
   userdietplan_id          Int      @id @default(autoincrement())
   userdietplan_user        User     @relation(fields: [userdietplan_user_id], references: [user_id], onDelete: Cascade)
-  userdietplan_user_id     Int
+  userdietplan_user_id     Int      @unique
   userdietplan_dietPlan    DietPlan @relation(fields: [userdietplan_dietPlan_Id], references: [dietplan_id], onDelete: Cascade)
   userdietplan_dietPlan_Id Int      @unique
 }
