@@ -120,7 +120,7 @@ export async function GET(request: Request): Promise<
             dietplan_mainMeals: meal_plan.mainMeals,
             dietplan_type: meal_plan.type,
             dietplan_snacks: meal_plan.snacks,
-            dietplan_calorieIntake: user_calorie_intake,
+            dietplan_calorieIntake: Math.floor(user_calorie_intake),
             dietplan_carbohydratesPercentage:
               generate_macro_nutrient.carbohydrates,
             dietplan_fatsPercentage: generate_macro_nutrient.fats,
@@ -151,7 +151,19 @@ export async function GET(request: Request): Promise<
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    if (error.message === "percentage should add up to 100") {
+      return NextResponse.json(
+        {
+          error: {
+            message: "percentage should add up to 100 update bio ",
+          },
+        },
+        {
+          status: 500,
+        }
+      );
+    }
     return NextResponse.json(
       {
         error: {
