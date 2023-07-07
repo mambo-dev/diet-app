@@ -60,7 +60,7 @@ export async function GET(request: Request): Promise<
       throw new Error("bio data was not created");
     }
 
-    const isBioDataUpdated = Object.values(bio_data).some((value) => {
+    const is_bio_data_updated = Object.values(bio_data).some((value) => {
       if (typeof value === "number") {
         return value > 0;
       } else if (typeof value === "string") {
@@ -74,12 +74,31 @@ export async function GET(request: Request): Promise<
       throw new Error("bio data was not created");
     }
 
-    if (!isBioDataUpdated) {
+    if (!is_bio_data_updated) {
       return NextResponse.json(
         {
           error: {
             message:
               "kindly update your bio data information to generate diet plan",
+          },
+        },
+        {
+          status: 403,
+        }
+      );
+    }
+
+    const check_diet_plan_existence = await db.dietPlan.findUnique({
+      where: {
+        dietplan_user_id: user.user_id,
+      },
+    });
+
+    if (check_diet_plan_existence) {
+      return NextResponse.json(
+        {
+          error: {
+            message: "cannot generate diet plan delete existing one",
           },
         },
         {
