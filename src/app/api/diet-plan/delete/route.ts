@@ -50,26 +50,10 @@ export async function DELETE(request: Request): Promise<
         { status: 403 }
       );
     }
-    const find_diet_plan = await db.userDietPlan.findUnique({
-      where: {
-        userdietplan_dietPlan_Id: Number(plan_id),
-      },
-    });
 
-    if (!find_diet_plan) {
-      return NextResponse.json(
-        {
-          error: {
-            message: "could not find requested diet plan",
-          },
-        },
-        { status: 404 }
-      );
-    }
-
-    const find_user_diet_plan = await db.userDietPlan.findUnique({
+    const find_user_diet_plan = await db.dietPlan.findUnique({
       where: {
-        userdietplan_user_id: user.user_id,
+        dietplan_user_id: user.user_id,
       },
     });
 
@@ -84,9 +68,9 @@ export async function DELETE(request: Request): Promise<
       );
     }
 
-    await db.userDietPlan.delete({
+    await db.dietPlan.delete({
       where: {
-        userdietplan_id: find_user_diet_plan.userdietplan_id,
+        dietplan_id: find_user_diet_plan.dietplan_id,
       },
     });
 

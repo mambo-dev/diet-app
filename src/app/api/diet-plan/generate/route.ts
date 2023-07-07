@@ -1,4 +1,4 @@
-import { DietPlan, UserDietPlan } from "@prisma/client";
+import { DietPlan } from "@prisma/client";
 import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -11,11 +11,10 @@ import generateMealPlan from "../../../../lib/diet-plan/getdietplan";
 export async function GET(request: Request): Promise<
   NextResponse<{
     data?:
-      | (UserDietPlan & {
-          userdietplan_user: {
+      | (DietPlan & {
+          dietplan_user: {
             user_id: number;
           };
-          userdietplan_dietPlan: DietPlan;
         })
       | null;
     error?: HandleError | HandleError[] | null;
@@ -112,30 +111,24 @@ export async function GET(request: Request): Promise<
 
     //save to database
 
-    const generated_user_diet_plan = await db.userDietPlan.create({
+    const generated_user_diet_plan = await db.dietPlan.create({
       data: {
-        userdietplan_dietPlan: {
-          create: {
-            dietplan_description: meal_plan.description,
-            dietplan_mainMeals: meal_plan.mainMeals,
-            dietplan_type: meal_plan.type,
-            dietplan_snacks: meal_plan.snacks,
-            dietplan_calorieIntake: Math.floor(user_calorie_intake),
-            dietplan_carbohydratesPercentage:
-              generate_macro_nutrient.carbohydrates,
-            dietplan_fatsPercentage: generate_macro_nutrient.fats,
-            dietplan_proteinsPercentage: generate_macro_nutrient.proteins,
-          },
-        },
-        userdietplan_user: {
+        dietplan_description: meal_plan.description,
+        dietplan_mainMeals: meal_plan.mainMeals,
+        dietplan_type: meal_plan.type,
+        dietplan_snacks: meal_plan.snacks,
+        dietplan_calorieIntake: Math.floor(user_calorie_intake),
+        dietplan_carbohydratesPercentage: generate_macro_nutrient.carbohydrates,
+        dietplan_fatsPercentage: generate_macro_nutrient.fats,
+        dietplan_proteinsPercentage: generate_macro_nutrient.proteins,
+        dietplan_user: {
           connect: {
             user_id: user.user_id,
           },
         },
       },
       include: {
-        userdietplan_dietPlan: true,
-        userdietplan_user: {
+        dietplan_user: {
           select: {
             user_id: true,
             user_password: false,
@@ -156,7 +149,8 @@ export async function GET(request: Request): Promise<
       return NextResponse.json(
         {
           error: {
-            message: "percentage should add up to 100 update bio ",
+            message:
+              "percentage should add up to 100 kindly update bio with right percentages",
           },
         },
         {

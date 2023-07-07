@@ -14,7 +14,7 @@ model User {
   user_id             Int              @id @default(autoincrement())
   user_username       String           @unique
   user_password       String
-  user_userdiet_plan  UserDietPlan?
+  user_diet_plan      DietPlan?
   user_customizedmeal CustomizedMeal[]
   user_meal_plan      MealPlan[]
   user_progress       Progress[]
@@ -52,7 +52,7 @@ enum Activity {
 }
 
 model DietPlan {
-  dietplan_id                      Int           @id @default(autoincrement())
+  dietplan_id                      Int        @id @default(autoincrement())
   dietplan_type                    DietType
   dietplan_description             String
   dietplan_calorieIntake           Int
@@ -61,7 +61,8 @@ model DietPlan {
   dietplan_fatsPercentage          Float
   dietplan_mainMeals               Int
   dietplan_snacks                  Int
-  dietplan_user_dietPlan           UserDietPlan?
+  dietplan_user                    User       @relation(fields: [dietplan_user_id], references: [user_id], onDelete: Cascade)
+  dietplan_user_id                 Int        @unique
   dietplan_meal_plan               MealPlan[]
 }
 
@@ -69,14 +70,6 @@ enum DietType {
   Balanced
   LowCarb
   HighProtein
-}
-
-model UserDietPlan {
-  userdietplan_id          Int      @id @default(autoincrement())
-  userdietplan_user        User     @relation(fields: [userdietplan_user_id], references: [user_id], onDelete: Cascade)
-  userdietplan_user_id     Int      @unique
-  userdietplan_dietPlan    DietPlan @relation(fields: [userdietplan_dietPlan_Id], references: [dietplan_id], onDelete: Cascade)
-  userdietplan_dietPlan_Id Int      @unique
 }
 
 model Food {
