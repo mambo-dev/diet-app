@@ -1,28 +1,31 @@
-export default function generateMealPlan(calorieIntake: number): {
-  mainMeals: number;
-  snacks: number;
-} {
-  const { dietType } = getDietType(calorieIntake);
+export default function generateMealPlan(
+  calorieIntake: number
+): Promise<{ mainMeals: number; snacks: number }> {
+  return new Promise<{ mainMeals: number; snacks: number }>(
+    (resolve, reject) => {
+      const { dietType } = getDietType(calorieIntake);
 
-  switch (dietType) {
-    case "Balanced":
-      return {
-        mainMeals: 3,
-        snacks: 2,
-      };
-    case "HighProtein":
-      return {
-        mainMeals: 4,
-        snacks: 2,
-      };
-    case "LowCarb":
-      return {
-        mainMeals: 3,
-        snacks: 1,
-      };
-    default:
-      throw new Error("invalid diet type passed");
-  }
+      switch (dietType) {
+        case "Balanced":
+          return resolve({
+            mainMeals: 3,
+            snacks: 2,
+          });
+        case "HighProtein":
+          return resolve({
+            mainMeals: 4,
+            snacks: 2,
+          });
+        case "LowCarb":
+          return resolve({
+            mainMeals: 3,
+            snacks: 1,
+          });
+        default:
+          return reject(new Error("invalid diet type passed"));
+      }
+    }
+  );
 }
 
 function getDietType(calorieIntake: number): {

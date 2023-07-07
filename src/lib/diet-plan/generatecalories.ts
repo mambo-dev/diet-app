@@ -10,22 +10,28 @@ export default function generate_macro_nutrients({
   carbohydrate_percentage,
   proteins_percentage,
   fats_percentage,
-}: IMacroNutrient): {
+}: IMacroNutrient): Promise<{
   carbohydrates: number;
   proteins: number;
   fats: number;
-} {
-  //calorie intake of carbo and proteins  is 4 calories per gram
-  const carbohydrates = carbohydrate_percentage / 100 - calorie_intake / 4;
+}> {
+  return new Promise<{
+    carbohydrates: number;
+    proteins: number;
+    fats: number;
+  }>((resolve, reject) => {
+    //calorie intake of carbo and proteins  is 4 calories per gram
+    const carbohydrates = carbohydrate_percentage / 100 - calorie_intake / 4;
 
-  const proteins = proteins_percentage / 100 - calorie_intake / 4;
+    const proteins = proteins_percentage / 100 - calorie_intake / 4;
 
-  //calorie intake of fats  is 9 calories per gram
-  const fats = fats_percentage / 100 - calorie_intake / 9;
+    //calorie intake of fats  is 9 calories per gram
+    const fats = fats_percentage / 100 - calorie_intake / 9;
 
-  return {
-    carbohydrates,
-    fats,
-    proteins,
-  };
+    return resolve({
+      carbohydrates,
+      fats,
+      proteins,
+    });
+  });
 }
