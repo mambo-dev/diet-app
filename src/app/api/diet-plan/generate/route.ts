@@ -1,4 +1,4 @@
-import { DietPlan } from "@prisma/client";
+import { DietPlan, UserDietPlan } from "@prisma/client";
 import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -10,7 +10,14 @@ import generateMealPlan from "../../../../lib/diet-plan/getdietplan";
 
 export async function GET(request: Request): Promise<
   NextResponse<{
-    data?: DietPlan | null;
+    data?:
+      | (UserDietPlan & {
+          userdietplan_user: {
+            user_id: number;
+          };
+          userdietplan_dietPlan: DietPlan;
+        })
+      | null;
     error?: HandleError | HandleError[] | null;
   }>
 > {
@@ -105,19 +112,42 @@ export async function GET(request: Request): Promise<
 
     //save to database
 
-    // const saveUserDietPlan = await db.userDietPlan.create({
-    //     data:{
-    //        userdietplan_user:{
-    //         connect:{
-
-    //         }
-    //        }
-    //     }
-    // })
+    const generated_user_diet_plan = await db.userDietPlan.create({
+      data: {
+        userdietplan_dietPlan: {
+          create: {
+            dietplan_description: meal_plan.description,
+            dietplan_mainMeals: meal_plan.mainMeals,
+            dietplan_type: meal_plan.type,
+            dietplan_snacks: meal_plan.snacks,
+            dietplan_calorieIntake: user_calorie_intake,
+            dietplan_carbohydratesPercentage:
+              generate_macro_nutrient.carbohydrates,
+            dietplan_fatsPercentage: generate_macro_nutrient.fats,
+            dietplan_proteinsPercentage: generate_macro_nutrient.proteins,
+          },
+        },
+        userdietplan_user: {
+          connect: {
+            user_id: user.user_id,
+          },
+        },
+      },
+      include: {
+        userdietplan_dietPlan: true,
+        userdietplan_user: {
+          select: {
+            user_id: true,
+            user_password: false,
+            user_username: false,
+          },
+        },
+      },
+    });
 
     return NextResponse.json(
       {
-        data: null,
+        data: generated_user_diet_plan,
       },
       { status: 200 }
     );
