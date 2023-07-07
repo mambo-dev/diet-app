@@ -53,7 +53,7 @@ enum Activity {
 
 model DietPlan {
   dietplan_id                      Int           @id @default(autoincrement())
-  dietplan_name                    String
+  dietplan_type                    DietType
   dietplan_description             String
   dietplan_calorieIntake           Int
   dietplan_carbohydratesPercentage Float
@@ -63,6 +63,12 @@ model DietPlan {
   dietplan_snacks                  Int
   dietplan_user_dietPlan           UserDietPlan?
   dietplan_meal_plan               MealPlan[]
+}
+
+enum DietType {
+  Balanced
+  LowCarb
+  HighProtein
 }
 
 model UserDietPlan {
