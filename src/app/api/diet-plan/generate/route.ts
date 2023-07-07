@@ -98,7 +98,8 @@ export async function GET(request: Request): Promise<
       return NextResponse.json(
         {
           error: {
-            message: "cannot generate diet plan delete existing one",
+            message:
+              "cannot generate new diet plan kindly delete existing one first",
           },
         },
         {

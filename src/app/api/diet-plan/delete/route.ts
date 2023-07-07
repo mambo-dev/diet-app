@@ -13,16 +13,6 @@ export async function DELETE(request: Request): Promise<
   try {
     // get user authentication status
 
-    const { searchParams } = new URL(request.url);
-
-    const plan_id = searchParams.get("plan_id");
-
-    if (!plan_id || isNaN(Number(plan_id))) {
-      throw new Error(
-        "invalid request missing plan id or plan id is not a number"
-      );
-    }
-
     const cookie = cookies();
 
     const access_token = cookie.get("access_token");
