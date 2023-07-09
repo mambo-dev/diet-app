@@ -3,11 +3,15 @@ import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
-import { MealPlan } from "@prisma/client";
+import { Meal, MealPlan } from "@prisma/client";
 
 export async function GET(request: Request): Promise<
   NextResponse<{
-    data?: MealPlan;
+    data?:
+      | (MealPlan & {
+          mealplan_meal: Meal[];
+        })
+      | null;
     error?: HandleError | HandleError[] | null;
   }>
 > {
@@ -70,6 +74,9 @@ export async function GET(request: Request): Promise<
     const find_user_current_meal_plan = await db.mealPlan.findUnique({
       where: {
         mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
+      },
+      include: {
+        mealplan_meal: true,
       },
     });
 
