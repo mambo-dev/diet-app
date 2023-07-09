@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { z } from "zod";
 import { db } from "../../../../lib/prisma";
-import getFood from "../../../../lib/fetch-food/food";
+
+import get_food from "../../../../lib/food/fetch-food";
+import save_food from "../../../../lib/food/save-food";
 
 export const addFoodSchema = z.object({
   id: z.string().min(1, "the food id should be provided"),
@@ -98,24 +100,9 @@ export async function POST(request: Request): Promise<
       );
     }
 
-    const food_data = await getFood(id);
+    const food_data = await get_food(id);
     //add and connect to diet plan
-
-    await db.food.create({
-      data: {
-        food_calories: food_data.nf_calories,
-        food_carbohydrates: food_data.nf_total_carbohydrate,
-        food_fats: food_data.nf_total_fat,
-        food_name: food_data.food_name,
-        food_nix_api_id: food_data.nix_item_id,
-        food_proteins: food_data.nf_protein,
-        food_diet_plan: {
-          connect: {
-            dietplan_user_id: user.user_id,
-          },
-        },
-      },
-    });
+    await save_food(food_data, user.user_id);
 
     return NextResponse.json(
       {

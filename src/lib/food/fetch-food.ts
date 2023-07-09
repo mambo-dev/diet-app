@@ -1,6 +1,6 @@
 import { FoodData } from "../type";
 
-export default async function getFood(id: string): Promise<FoodData> {
+export default async function get_food(id: string): Promise<FoodData> {
   const response = await fetch(
     `https://trackapi.nutritionix.com/v2/search/item?nix_item_id=${id}`,
     {

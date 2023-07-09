@@ -7,7 +7,7 @@ import { db } from "../../../../../lib/prisma";
 import { HandleError } from "../../../../../lib/type";
 
 export const signUpSchema = z.object({
-  food_nix_id: z.string().min(1, "please provide a username"),
+  food_nix_id: z.string().min(1, "please provide a food id "),
   meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
 });
 
