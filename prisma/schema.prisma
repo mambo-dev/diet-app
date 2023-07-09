@@ -120,9 +120,10 @@ model MealPlan {
   mealplan_user           User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
   mealplan_user_id        Int
   mealplan_diet_plan      DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
-  mealplan_diet_plan_id   Int
-  mealplan_day_of_Week    String
-  mealplan_mealtime       String
+  mealplan_diet_plan_id   Int              @unique
+  mealplan_day_of_Week    DateTime
+  mealplan_start          DateTime
+  mealplan_end            DateTime
   mealplan_customizedMeal CustomizedMeal[]
   mealplan_saved          SavedMealPlan?   @relation(fields: [mealplan_saved_id], references: [savedmealplan_id])
   mealplan_saved_id       Int?

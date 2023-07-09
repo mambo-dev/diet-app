@@ -3,6 +3,7 @@ import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
+import { eachDayOfInterval, addDays } from "date-fns";
 
 export async function GET(request: Request): Promise<
   NextResponse<{
@@ -57,6 +58,55 @@ export async function GET(request: Request): Promise<
         { status: 404 }
       );
     }
+
+    const user_has_mealplan = await db.mealPlan.findUnique({
+      where: {
+        mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
+      },
+    });
+
+    if (user_has_mealplan) {
+      const currentDate = new Date();
+      const meal_plan_is_active =
+        currentDate > new Date(user_has_mealplan.mealplan_end) ? false : true;
+
+      if (meal_plan_is_active) {
+        return NextResponse.json(
+          {
+            error: {
+              message:
+                "cannot generate new meal plan while meal plan is active delete current meal plan",
+            },
+          },
+          { status: 403 }
+        );
+      }
+    }
+
+    const user_week_days = eachDayOfInterval({
+      start: new Date(),
+      end: addDays(new Date(), 7),
+    });
+
+    user_week_days.forEach(async (day) => {
+      await db.mealPlan.create({
+        data: {
+          mealplan_day_of_Week: day,
+          mealplan_start: new Date(),
+          mealplan_end: addDays(new Date(), 7),
+          mealplan_diet_plan: {
+            connect: {
+              dietplan_id: find_user_diet_plan.dietplan_id,
+            },
+          },
+          mealplan_user: {
+            connect: {
+              user_id: user.user_id,
+            },
+          },
+        },
+      });
+    });
 
     return NextResponse.json(
       {
