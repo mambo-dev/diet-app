@@ -76,7 +76,11 @@ export async function GET(request: Request): Promise<
         mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
       },
       include: {
-        mealplan_meal: true,
+        mealplan_meal: {
+          include: {
+            meal_food: true,
+          },
+        },
       },
     });
 

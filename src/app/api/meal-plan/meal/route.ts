@@ -89,6 +89,10 @@ export async function POST(request: Request): Promise<
 
     const { food_items_ids, meal_type } = create_meal_schema.parse(body);
 
+    /**
+     * @FIXME change implementaion of meal creation and adding
+     * @TODO find put why its not working as it should
+     */
     food_items_ids.forEach(async (id) => {
       //check availability of the food
       const food = await find_food(id);
