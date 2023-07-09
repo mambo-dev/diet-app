@@ -75,6 +75,7 @@ enum DietType {
 
 model Food {
   food_id              Int              @id @default(autoincrement())
+  food_nix_api_id      String           @unique
   food_name            String
   food_calories        Float
   food_carbohydrates   Float

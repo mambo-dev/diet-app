@@ -17,3 +17,13 @@ export type DecodedToken = {
 export type HandleError = {
   message: string | undefined;
 };
+
+export type FoodData = {
+  food_name: string;
+  serving_qty: number;
+  nf_calories: number;
+  nf_total_fat: number;
+  nf_protein: number;
+  nf_total_carbohydrate: number;
+  food_nix_api_id: string;
+};
