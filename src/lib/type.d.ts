@@ -25,5 +25,5 @@ export type FoodData = {
   nf_total_fat: number;
   nf_protein: number;
   nf_total_carbohydrate: number;
-  food_nix_api_id: string;
+  nix_item_id: string;
 };

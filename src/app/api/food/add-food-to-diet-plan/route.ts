@@ -111,15 +111,16 @@ export async function POST(request: Request): Promise<
       throw new Error("food not found in database invalid id provided");
     }
 
-    const food_data = (await response.json()) as FoodData;
+    const food_data = (await response.json()).foods[0] as FoodData;
     //add and connect to diet plan
+
     await db.food.create({
       data: {
         food_calories: food_data.nf_calories,
         food_carbohydrates: food_data.nf_total_carbohydrate,
         food_fats: food_data.nf_total_fat,
         food_name: food_data.food_name,
-        food_nix_api_id: food_data.food_nix_api_id,
+        food_nix_api_id: food_data.nix_item_id,
         food_proteins: food_data.nf_protein,
         food_diet_plan: {
           connect: {
