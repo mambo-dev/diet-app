@@ -101,11 +101,12 @@ model CustomizedMeal {
 }
 
 model Meal {
-  meal_id           Int      @id @default(autoincrement())
-  meal_type         MealType
-  meal_food         Food[]
-  meal_meal_plan    MealPlan @relation(fields: [meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
-  meal_meal_plan_id Int
+  meal_id              Int       @id @default(autoincrement())
+  meal_type            MealType?
+  mealplan_day_of_week DateTime
+  meal_food            Food[]
+  meal_meal_plan       MealPlan  @relation(fields: [meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
+  meal_meal_plan_id    Int
 }
 
 enum MealType {
@@ -121,7 +122,6 @@ model MealPlan {
   mealplan_user_id        Int
   mealplan_diet_plan      DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
   mealplan_diet_plan_id   Int              @unique
-  mealplan_day_of_Week    DateTime
   mealplan_start          DateTime
   mealplan_end            DateTime
   mealplan_customizedMeal CustomizedMeal[]

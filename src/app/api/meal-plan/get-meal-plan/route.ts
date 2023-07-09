@@ -3,11 +3,11 @@ import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
-import { eachDayOfInterval, addDays } from "date-fns";
+import { MealPlan } from "@prisma/client";
 
 export async function GET(request: Request): Promise<
   NextResponse<{
-    data?: boolean;
+    data?: MealPlan;
     error?: HandleError | HandleError[] | null;
   }>
 > {
@@ -46,6 +46,9 @@ export async function GET(request: Request): Promise<
       where: {
         dietplan_user_id: user.user_id,
       },
+      include: {
+        dietplan_meal_plan: true,
+      },
     });
 
     if (!find_user_diet_plan) {
@@ -59,66 +62,35 @@ export async function GET(request: Request): Promise<
       );
     }
 
-    const user_has_mealplan = await db.mealPlan.findUnique({
+    // a meal plan is a week long commitment so we need to get all meal plan associated with a date
+    // this is what the client will send to the server the end date of the meal plan
+    // @TODO mealplans will be delete after the end date so  we add a background worker for this
+    // return meal plan associated to the user diet and confirm not expired
+
+    const find_user_current_meal_plan = await db.mealPlan.findUnique({
       where: {
         mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
       },
     });
 
-    if (user_has_mealplan) {
-      const currentDate = new Date();
-      const meal_plan_is_active =
-        currentDate > new Date(user_has_mealplan.mealplan_end) ? false : true;
-
-      if (meal_plan_is_active) {
-        return NextResponse.json(
-          {
-            error: {
-              message:
-                "cannot generate new meal plan while meal plan is active delete current meal plan",
-            },
+    if (!find_user_current_meal_plan) {
+      return NextResponse.json(
+        {
+          error: {
+            message: "could not find meal plan",
           },
-          { status: 403 }
-        );
-      }
+        },
+        {
+          status: 404,
+        }
+      );
     }
-
-    const user_week_days = eachDayOfInterval({
-      start: new Date(),
-      end: addDays(new Date(), 7),
-    });
-
-    const meals = user_week_days.map((date) => {
-      return {
-        mealplan_day_of_week: date,
-      };
-    });
-
-    await db.mealPlan.create({
-      data: {
-        mealplan_start: new Date(),
-        mealplan_end: addDays(new Date(), 7),
-        mealplan_diet_plan: {
-          connect: {
-            dietplan_id: find_user_diet_plan.dietplan_id,
-          },
-        },
-        mealplan_user: {
-          connect: {
-            user_id: user.user_id,
-          },
-        },
-        mealplan_meal: {
-          createMany: {
-            data: meals,
-          },
-        },
-      },
-    });
-
+    /**
+     * @TODO change database schema for the meal plan relation with user
+     */
     return NextResponse.json(
       {
-        data: true,
+        data: find_user_current_meal_plan,
       },
       { status: 200 }
     );
