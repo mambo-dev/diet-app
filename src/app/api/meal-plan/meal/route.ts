@@ -1,13 +1,16 @@
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { z } from "zod";
-import verifyAuth from "../../../../../lib/auth";
-import { db } from "../../../../../lib/prisma";
-import { HandleError } from "../../../../../lib/type";
+import verifyAuth from "../../../../lib/auth";
+import { db } from "../../../../lib/prisma";
+import { HandleError } from "../../../../lib/type";
+import find_food from "../../../../lib/food/find-food";
+import get_food from "../../../../lib/food/fetch-food";
+import save_food from "../../../../lib/food/save-food";
 
-export const signUpSchema = z.object({
-  food_nix_id: z.string().min(1, "please provide a food id "),
+export const create_meal_schema = z.object({
+  food_items_ids: z.array(z.string().min(1, "please provide a food id ")),
   meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
 });
 
@@ -18,7 +21,14 @@ export async function POST(request: Request): Promise<
   }>
 > {
   try {
+    const { searchParams } = new URL(request.url);
     const cookie = cookies();
+    const body = await request.json();
+    const meal_id = searchParams.get("meal_id");
+
+    if (!meal_id || isNaN(Number(meal_id))) {
+      throw new Error("invalid id value sent");
+    }
 
     const access_token = cookie.get("access_token");
 
@@ -76,6 +86,46 @@ export async function POST(request: Request): Promise<
         { status: 404 }
       );
     }
+
+    const { food_items_ids, meal_type } = create_meal_schema.parse(body);
+
+    food_items_ids.forEach(async (id) => {
+      //check availability of the food
+      const food = await find_food(id);
+      if (!food) {
+        const food_from_api = await get_food(id);
+        const new_food = await save_food(food_from_api, user.user_id);
+
+        await db.meal.update({
+          where: {
+            meal_id: Number(meal_id),
+          },
+          data: {
+            meal_type,
+            meal_food: {
+              connect: {
+                food_id: new_food.food_id,
+              },
+            },
+          },
+        });
+      } else {
+        const food_to_add = await find_food(id);
+        await db.meal.update({
+          where: {
+            meal_id: Number(meal_id),
+          },
+          data: {
+            meal_type,
+            meal_food: {
+              connect: {
+                food_id: food_to_add.food_id,
+              },
+            },
+          },
+        });
+      }
+    });
 
     return NextResponse.json(
       {

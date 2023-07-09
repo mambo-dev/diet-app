@@ -1,9 +1,13 @@
+import { Food } from "@prisma/client";
 import { db } from "../prisma";
 import { FoodData } from "../type";
 
-export default async function save_food(food_data: FoodData, user_id: number) {
+export default async function save_food(
+  food_data: FoodData,
+  user_id: number
+): Promise<Food> {
   try {
-    await db.food.create({
+    const new_food = await db.food.create({
       data: {
         food_calories: food_data.nf_calories,
         food_carbohydrates: food_data.nf_total_carbohydrate,
@@ -19,7 +23,7 @@ export default async function save_food(food_data: FoodData, user_id: number) {
       },
     });
 
-    return true;
+    return new_food;
   } catch (error) {
     throw new Error("could not save food");
   }
