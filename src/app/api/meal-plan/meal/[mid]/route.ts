@@ -1,23 +1,23 @@
-import { NextResponse } from "next/server";
-import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
-import verifyAuth from "../../../../lib/auth";
-import { db } from "../../../../lib/prisma";
-import { Meal, MealPlan } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request): Promise<
+import { z } from "zod";
+import verifyAuth from "../../../../../lib/auth";
+import { db } from "../../../../../lib/prisma";
+import { HandleError } from "../../../../../lib/type";
+
+export const signUpSchema = z.object({
+  food_nix_id: z.string().min(1, "please provide a username"),
+  meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
+});
+
+export async function POST(request: Request): Promise<
   NextResponse<{
-    data?:
-      | (MealPlan & {
-          mealplan_meal: Meal[];
-        })
-      | null;
-    error?: HandleError | HandleError[] | null;
+    data?: boolean;
+    error?: HandleError | HandleError[] | z.ZodIssue[];
   }>
 > {
   try {
-    // get user authentication status
-
     const cookie = cookies();
 
     const access_token = cookie.get("access_token");
@@ -66,43 +66,35 @@ export async function GET(request: Request): Promise<
       );
     }
 
-    // a meal plan is a week long commitment so we need to get all meal plan associated with a date
-    // this is what the client will send to the server the end date of the meal plan
-    // @TODO mealplans will be delete after the end date so  we add a background worker for this
-    // return meal plan associated to the user diet and confirm not expired
-
-    const find_user_current_meal_plan = await db.mealPlan.findUnique({
-      where: {
-        mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
-      },
-      include: {
-        mealplan_meal: true,
-      },
-    });
-
-    if (!find_user_current_meal_plan) {
+    if (!find_user_diet_plan.dietplan_meal_plan) {
       return NextResponse.json(
         {
           error: {
-            message: "could not find meal plan",
+            message: "could not find a meal plan try generating one first",
           },
         },
-        {
-          status: 404,
-        }
+        { status: 404 }
       );
     }
-    /**
-     * @TODO change database schema for the meal plan relation with user
-     */
 
     return NextResponse.json(
       {
-        data: find_user_current_meal_plan,
+        data: true,
       },
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: error.issues,
+        },
+        {
+          status: 403,
+        }
+      );
+    }
     return NextResponse.json(
       {
         error: {

@@ -3,21 +3,15 @@ import { HandleError } from "../../../../lib/type";
 import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
-import { Meal, MealPlan } from "@prisma/client";
 
-export async function GET(request: Request): Promise<
+export async function DELETE(request: Request): Promise<
   NextResponse<{
-    data?:
-      | (MealPlan & {
-          mealplan_meal: Meal[];
-        })
-      | null;
+    data?: boolean;
     error?: HandleError | HandleError[] | null;
   }>
 > {
   try {
     // get user authentication status
-
     const cookie = cookies();
 
     const access_token = cookie.get("access_token");
@@ -50,9 +44,6 @@ export async function GET(request: Request): Promise<
       where: {
         dietplan_user_id: user.user_id,
       },
-      include: {
-        dietplan_meal_plan: true,
-      },
     });
 
     if (!find_user_diet_plan) {
@@ -66,39 +57,13 @@ export async function GET(request: Request): Promise<
       );
     }
 
-    // a meal plan is a week long commitment so we need to get all meal plan associated with a date
-    // this is what the client will send to the server the end date of the meal plan
-    // @TODO mealplans will be delete after the end date so  we add a background worker for this
-    // return meal plan associated to the user diet and confirm not expired
-
-    const find_user_current_meal_plan = await db.mealPlan.findUnique({
-      where: {
-        mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
-      },
-      include: {
-        mealplan_meal: true,
-      },
+    await db.mealPlan.delete({
+      where: { mealplan_diet_plan_id: find_user_diet_plan.dietplan_id },
     });
-
-    if (!find_user_current_meal_plan) {
-      return NextResponse.json(
-        {
-          error: {
-            message: "could not find meal plan",
-          },
-        },
-        {
-          status: 404,
-        }
-      );
-    }
-    /**
-     * @TODO change database schema for the meal plan relation with user
-     */
 
     return NextResponse.json(
       {
-        data: find_user_current_meal_plan,
+        data: true,
       },
       { status: 200 }
     );
