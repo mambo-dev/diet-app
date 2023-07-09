@@ -64,7 +64,7 @@ model DietPlan {
   dietplan_user                    User       @relation(fields: [dietplan_user_id], references: [user_id], onDelete: Cascade)
   dietplan_user_id                 Int        @unique
   dietplan_meal_plan               MealPlan[]
-  Food                             Food[]
+  diet_plan_food                   Food[]
 }
 
 enum DietType {
