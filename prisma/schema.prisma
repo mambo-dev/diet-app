@@ -85,6 +85,8 @@ model Food {
   food_customized_meal CustomizedMeal[]
   food_diet_plan       DietPlan         @relation(fields: [food_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
   food_diet_plan_id    Int
+  Meal                 Meal?            @relation(fields: [mealMeal_id], references: [meal_id])
+  mealMeal_id          Int?
 }
 
 model CustomizedMeal {
@@ -98,17 +100,33 @@ model CustomizedMeal {
   customized_meal_meal_plan_id Int?
 }
 
+model Meal {
+  meal_id           Int      @id @default(autoincrement())
+  meal_type         MealType
+  meal_food         Food[]
+  meal_meal_plan    MealPlan @relation(fields: [meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
+  meal_meal_plan_id Int
+}
+
+enum MealType {
+  breakfast
+  lunch
+  dinner
+  snacks
+}
+
 model MealPlan {
-  mealplan_id                   Int              @id @default(autoincrement())
-  mealplan_user                 User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
-  mealplan_user_id              Int
-  mealplan_diet_plan            DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
-  mealplan_diet_plan_id         Int
-  mealplan_day_of_Week          String
-  mealplan_mealtime             String
-  mealplan_customizedMeal       CustomizedMeal[]
-  mealplan_saved                SavedMealPlan?   @relation(fields: [savedMealPlanSavedmealplan_id], references: [savedmealplan_id])
-  savedMealPlanSavedmealplan_id Int?
+  mealplan_id             Int              @id @default(autoincrement())
+  mealplan_user           User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
+  mealplan_user_id        Int
+  mealplan_diet_plan      DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
+  mealplan_diet_plan_id   Int
+  mealplan_day_of_Week    String
+  mealplan_mealtime       String
+  mealplan_customizedMeal CustomizedMeal[]
+  mealplan_saved          SavedMealPlan?   @relation(fields: [mealplan_saved_id], references: [savedmealplan_id])
+  mealplan_saved_id       Int?
+  mealplan_meal           Meal[]
 }
 
 model SavedMealPlan {
