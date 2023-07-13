@@ -106,7 +106,7 @@ model Meal {
   mealplan_day_of_week DateTime
   meal_food            Food[]
   meal_meal_plan       MealPlan  @relation(fields: [meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
-  meal_meal_plan_id    Int @unique
+  meal_meal_plan_id    Int
 }
 
 enum MealType {
@@ -128,6 +128,7 @@ model MealPlan {
   mealplan_saved          SavedMealPlan?   @relation(fields: [mealplan_saved_id], references: [savedmealplan_id])
   mealplan_saved_id       Int?
   mealplan_meal           Meal[]
+  mealplan_shopping_list  ShoppingList?
 }
 
 model SavedMealPlan {
@@ -141,4 +142,11 @@ model Progress {
   progress_user_id      Int
   progress_weight       Float
   progress_measurements String[]
+}
+
+model ShoppingList {
+  shopping_list_id          Int      @id @default(autoincrement())
+  shopping_list_ingridients String[]
+  shopping_list_mealplan    MealPlan @relation(fields: [shopping_list_mealplan_id], references: [mealplan_id], onDelete: Cascade)
+  shopping_list_mealplan_id Int      @unique
 }
