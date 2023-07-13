@@ -125,15 +125,12 @@ model MealPlan {
   mealplan_start          DateTime
   mealplan_end            DateTime
   mealplan_customizedMeal CustomizedMeal[]
-  mealplan_saved          SavedMealPlan?   @relation(fields: [mealplan_saved_id], references: [savedmealplan_id])
-  mealplan_saved_id       Int?
   mealplan_meal           Meal[]
   mealplan_shopping_list  ShoppingList?
 }
 
 model SavedMealPlan {
-  savedmealplan_id Int        @id @default(autoincrement())
-  savedMealPlan    MealPlan[]
+  savedmealplan_id Int @id @default(autoincrement())
 }
 
 model Progress {
