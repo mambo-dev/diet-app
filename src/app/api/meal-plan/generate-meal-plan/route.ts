@@ -13,7 +13,6 @@ export async function GET(request: Request): Promise<
 > {
   try {
     // get user authentication status
-
     const cookie = cookies();
 
     const access_token = cookie.get("access_token");
@@ -87,6 +86,8 @@ export async function GET(request: Request): Promise<
       start: new Date(),
       end: addDays(new Date(), 7),
     });
+
+    // generate a meal for each meal plus snacks
 
     const meals = user_week_days.map((date) => {
       return {

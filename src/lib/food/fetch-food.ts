@@ -12,7 +12,7 @@ export default async function get_food(id: string): Promise<FoodData> {
   );
 
   if (response.status !== 200) {
-    throw new Error("food not found in database invalid id provided");
+    throw new Error("food not found in api database invalid id provided");
   }
 
   const food_data = (await response.json()).foods[0] as FoodData;

@@ -106,7 +106,7 @@ model Meal {
   mealplan_day_of_week DateTime
   meal_food            Food[]
   meal_meal_plan       MealPlan  @relation(fields: [meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
-  meal_meal_plan_id    Int
+  meal_meal_plan_id    Int @unique
 }
 
 enum MealType {

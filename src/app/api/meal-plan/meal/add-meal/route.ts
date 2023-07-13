@@ -1,34 +1,31 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
+import { Meal, MealPlan } from "@prisma/client";
 import { z } from "zod";
-import verifyAuth from "../../../../lib/auth";
-import { db } from "../../../../lib/prisma";
-import { HandleError } from "../../../../lib/type";
-import find_food from "../../../../lib/food/find-food";
-import get_food from "../../../../lib/food/fetch-food";
-import save_food from "../../../../lib/food/save-food";
+import { HandleError } from "../../../../../lib/type";
+import verifyAuth from "../../../../../lib/auth";
+import { db } from "../../../../../lib/prisma";
+import find_food from "../../../../../lib/food/find-food";
+import get_food from "../../../../../lib/food/fetch-food";
+import save_food from "../../../../../lib/food/save-food";
 
-export const create_meal_schema = z.object({
+export const add_meal_schema = z.object({
   food_items_ids: z.array(z.string().min(1, "please provide a food id ")),
   meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
+  meal_day_of_week: z.string().transform((week) => new Date(week)),
 });
 
 export async function POST(request: Request): Promise<
   NextResponse<{
     data?: boolean;
-    error?: HandleError | HandleError[] | z.ZodIssue[];
+    error?: HandleError | HandleError[] | null;
   }>
 > {
   try {
-    const { searchParams } = new URL(request.url);
-    const cookie = cookies();
+    // get user authentication status
     const body = await request.json();
-    const meal_id = searchParams.get("meal_id");
-
-    if (!meal_id || isNaN(Number(meal_id))) {
-      throw new Error("invalid id value sent");
-    }
+    const cookie = cookies();
 
     const access_token = cookie.get("access_token");
 
@@ -76,56 +73,77 @@ export async function POST(request: Request): Promise<
       );
     }
 
-    if (!find_user_diet_plan.dietplan_meal_plan) {
+    // a meal plan is a week long commitment so we need to get all meal plan associated with a date
+    // this is what the client will send to the server the end date of the meal plan
+    // @TODO mealplans will be delete after the end date so  we add a background worker for this
+    // return meal plan associated to the user diet and confirm not expired
+
+    const find_user_current_meal_plan = await db.mealPlan.findUnique({
+      where: {
+        mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
+      },
+      include: {
+        mealplan_meal: {
+          include: {
+            meal_food: true,
+          },
+        },
+      },
+    });
+
+    if (!find_user_current_meal_plan) {
       return NextResponse.json(
         {
           error: {
-            message: "could not find a meal plan try generating one first",
+            message: "could not find meal plan",
           },
         },
-        { status: 404 }
+        {
+          status: 404,
+        }
       );
     }
 
-    const { food_items_ids, meal_type } = create_meal_schema.parse(body);
+    const { food_items_ids, meal_type, meal_day_of_week } =
+      add_meal_schema.parse(body);
 
-    /**
-     * @FIXME change implementaion of meal creation and adding
-     * @TODO find put why its not working as it should
-     */
     food_items_ids.forEach(async (id) => {
-      //check availability of the food
       const food = await find_food(id);
       if (!food) {
         const food_from_api = await get_food(id);
         const new_food = await save_food(food_from_api, user.user_id);
 
-        await db.meal.update({
-          where: {
-            meal_id: Number(meal_id),
-          },
+        await db.meal.create({
           data: {
+            meal_meal_plan: {
+              connect: {
+                mealplan_id: find_user_current_meal_plan.mealplan_id,
+              },
+            },
             meal_type,
             meal_food: {
               connect: {
                 food_id: new_food.food_id,
               },
             },
+            mealplan_day_of_week: meal_day_of_week,
           },
         });
       } else {
-        const food_to_add = await find_food(id);
-        await db.meal.update({
-          where: {
-            meal_id: Number(meal_id),
-          },
+        await db.meal.create({
           data: {
+            meal_meal_plan: {
+              connect: {
+                mealplan_id: find_user_current_meal_plan.mealplan_id,
+              },
+            },
             meal_type,
             meal_food: {
               connect: {
-                food_id: food_to_add.food_id,
+                food_id: food.food_id,
               },
             },
+            mealplan_day_of_week: meal_day_of_week,
           },
         });
       }
@@ -138,17 +156,6 @@ export async function POST(request: Request): Promise<
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          error: error.issues,
-        },
-        {
-          status: 403,
-        }
-      );
-    }
     return NextResponse.json(
       {
         error: {

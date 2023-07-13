@@ -1,6 +1,4 @@
-export default function generateMealPlan(
-  calorieIntake: number
-): Promise<{
+export default function generateMealPlan(calorieIntake: number): Promise<{
   mainMeals: number;
   snacks: number;
   description: string;
