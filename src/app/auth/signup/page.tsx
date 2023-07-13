@@ -54,6 +54,7 @@ const SignUpPage = (props: Props) => {
         });
         return;
       }
+
       toast({
         message: "You did everything right could not submit your form tho",
         duration: 3000,
