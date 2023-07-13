@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
 
-export default async function DELETE(request: Request): Promise<
+export async function DELETE(request: Request): Promise<
   NextResponse<{
     data?: boolean;
     error?: HandleError | HandleError[] | null;

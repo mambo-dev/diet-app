@@ -11,7 +11,7 @@ export const create_shopping_list = z.object({
     .nonempty("you should have atleast one food item "),
 });
 
-export default async function PUT(request: Request): Promise<
+export async function PUT(request: Request): Promise<
   NextResponse<{
     data?: boolean;
     error?: HandleError | HandleError[] | null;
