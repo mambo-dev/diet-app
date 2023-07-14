@@ -4,13 +4,11 @@ import { z } from "zod";
 import { db } from "../../../../lib/prisma";
 import * as argon2 from "argon2";
 import { signUpSchema } from "../../../../lib/schemas/schemas";
+import { ServerResponse } from "../../../../lib/type";
 
-export async function POST(request: Request): Promise<
-  NextResponse<{
-    success?: boolean;
-    error?: string | z.ZodIssue[];
-  }>
-> {
+export async function POST(
+  request: Request
+): Promise<NextResponse<ServerResponse<boolean>>> {
   try {
     const body = await request.json();
 
@@ -30,9 +28,13 @@ export async function POST(request: Request): Promise<
 
     if (userExists || emailInUse) {
       return NextResponse.json({
-        error: userExists
-          ? "you already have an account try loggin in instead"
-          : "this email is already in use try different email",
+        error: [
+          {
+            message: userExists
+              ? "you already have an account try loggin in instead"
+              : "this email is already in use try different email",
+          },
+        ],
       });
     }
 
@@ -54,12 +56,11 @@ export async function POST(request: Request): Promise<
 
     return NextResponse.json(
       {
-        success: true,
+        data: true,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -73,7 +74,11 @@ export async function POST(request: Request): Promise<
 
     return NextResponse.json(
       {
-        error: "something went wrong with the server",
+        error: [
+          {
+            message: "something went wrong with the server",
+          },
+        ],
       },
       {
         status: 500,

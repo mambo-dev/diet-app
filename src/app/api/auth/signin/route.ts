@@ -4,6 +4,7 @@ import { db } from "../../../../lib/prisma";
 import * as argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
+import { ServerResponse } from "../../../../lib/type";
 
 export const signInSchema = z.object({
   username: z.string().min(1, "please provide a username"),
@@ -11,12 +12,9 @@ export const signInSchema = z.object({
   password: z.string().min(1, "please provide a password"),
 });
 
-export async function POST(request: Request): Promise<
-  NextResponse<{
-    success?: boolean;
-    error?: string | z.ZodIssue[];
-  }>
-> {
+export async function POST(
+  request: Request
+): Promise<NextResponse<ServerResponse<boolean>>> {
   try {
     const body = await request.json();
 
@@ -30,7 +28,11 @@ export async function POST(request: Request): Promise<
 
     if (!userExists) {
       return NextResponse.json({
-        error: "invalid password or username",
+        error: [
+          {
+            message: "invalid password or username",
+          },
+        ],
       });
     }
 
@@ -42,7 +44,11 @@ export async function POST(request: Request): Promise<
     if (!passwordMatches) {
       return NextResponse.json(
         {
-          error: "invalid password or username",
+          error: [
+            {
+              message: "invalid password or username",
+            },
+          ],
         },
         {
           status: 403,
@@ -63,7 +69,7 @@ export async function POST(request: Request): Promise<
 
     return NextResponse.json(
       {
-        success: true,
+        data: true,
       },
       {
         headers: {
@@ -79,7 +85,6 @@ export async function POST(request: Request): Promise<
       }
     );
   } catch (error) {
-    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -93,7 +98,11 @@ export async function POST(request: Request): Promise<
 
     return NextResponse.json(
       {
-        error: "something went wrong with the server",
+        error: [
+          {
+            message: "something went wrong with the server",
+          },
+        ],
       },
       {
         status: 500,

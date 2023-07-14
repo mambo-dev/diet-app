@@ -27,3 +27,8 @@ export type FoodData = {
   nf_total_carbohydrate: number;
   nix_item_id: string;
 };
+
+export type ServerResponse<T> = {
+  data?: T;
+  error?: z.ZodIssue[] | HandleError[] | null;
+};
