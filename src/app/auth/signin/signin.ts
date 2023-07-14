@@ -1,16 +1,14 @@
 import { ServerResponse } from "../../../lib/type";
 
-interface ISignUp {
+interface ISignIn {
   username: string;
   password: string;
-  email: string;
-  confirmPassword: string;
 }
 
-export default async function sign_up(
-  signUpDetails: ISignUp
+export default async function sign_in(
+  signUpDetails: ISignIn
 ): Promise<boolean | undefined> {
-  const res = await fetch(`/api/auth/signup`, {
+  const res = await fetch(`/api/auth/signin`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",

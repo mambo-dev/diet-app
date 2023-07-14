@@ -7,6 +7,10 @@ import { Input } from "../../../components/ui/input";
 import Button from "../../../components/ui/button";
 import { toast } from "../../../components/ui/toast";
 import { signUpSchema } from "../../../lib/schemas/schemas";
+import { z } from "zod";
+import sign_up from "./signup";
+import sign_in from "../signin/signin";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -17,7 +21,7 @@ const SignUpPage = (props: Props) => {
     password: "",
     confirmPassword: "",
   });
-
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(
@@ -28,7 +32,7 @@ const SignUpPage = (props: Props) => {
     setInitialState({ ...initialState, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -36,22 +40,46 @@ const SignUpPage = (props: Props) => {
       const { username, email, password, confirmPassword } =
         signUpSchema.parse(initialState);
       //function to create account
-
+      await sign_up({
+        confirmPassword,
+        password,
+        email,
+        username,
+      });
       //function to login
+      await sign_in({
+        username,
+        password,
+      });
       //redirect user to the dashboard
-
       toast({
         message: "Glad to have you as a team member",
         title: "Welcome to healthy haven",
         type: "success",
       });
+
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 500);
     } catch (error) {
       if (error instanceof Error) {
-        toast({
-          message: error.message,
-          title: "Error",
-          type: "error",
-        });
+        if (error instanceof z.ZodError) {
+          error.issues
+            .map((error) => {
+              return {
+                message: error.message,
+              };
+            })
+            .forEach((error) => {
+              toast({
+                message: error.message,
+                title: "required fields",
+                type: "error",
+                duration: 5000,
+              });
+            });
+        }
+
         return;
       }
 
@@ -103,7 +131,7 @@ const SignUpPage = (props: Props) => {
             onChange={handleChange}
           />
           <Input
-            name="username"
+            name="confirmPassword"
             value={initialState.confirmPassword}
             label="confirm password"
             type="password"
