@@ -6,7 +6,7 @@ import { db } from "../../../lib/prisma";
 import { BioData } from "@prisma/client";
 import { HandleError } from "../../../lib/type";
 
-export const signInSchema = z.object({
+export const bioDataSchema = z.object({
   age: z
     .string()
     .min(1, "please provide your age")
@@ -90,7 +90,7 @@ export async function POST(request: Request): Promise<Response> {
       carbohydrates_ratio,
       fats_ratio,
       proteins_ratio,
-    } = signInSchema.parse(body);
+    } = bioDataSchema.parse(body);
 
     await db.bioData.update({
       where: {

@@ -58,9 +58,7 @@ const SignUpPage = (props: Props) => {
         type: "success",
       });
 
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 500);
+      router.push("/dashboard");
     } catch (error) {
       if (error instanceof Error) {
         if (error instanceof z.ZodError) {
@@ -96,7 +94,7 @@ const SignUpPage = (props: Props) => {
 
   return (
     <div className="min-h-screen h-full flex ">
-      <div className="w-[40%] mx-auto flex flex-col items-center gap-3  py-20 px-10">
+      <div className="w-full md:w-[40%] mx-auto flex flex-col items-center gap-3  py-20  px-4 md:px-10">
         <div className="flex flex-col items-center   mr-auto">
           <Heading className="mr-auto " size="xs">
             Welcome to Healthy haven
@@ -147,7 +145,7 @@ const SignUpPage = (props: Props) => {
           </Button>
         </form>
       </div>
-      <div className=" relative h-screen w-[40%]">
+      <div className="hidden md:flex relative h-screen w-[40%]">
         <Image alt="sign up banner" src="/images/signup.jpg" fill />
       </div>
     </div>

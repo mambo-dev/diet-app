@@ -5,12 +5,7 @@ import * as argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
 import { ServerResponse } from "../../../../lib/type";
-
-export const signInSchema = z.object({
-  username: z.string().min(1, "please provide a username"),
-
-  password: z.string().min(1, "please provide a password"),
-});
+import { signInSchema } from "../../../../lib/schemas/schemas";
 
 export async function POST(
   request: Request
