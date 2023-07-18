@@ -7,13 +7,13 @@ import { Input } from "../../../components/ui/input";
 import Button from "../../../components/ui/button";
 import { toast } from "../../../components/ui/toast";
 import { z } from "zod";
-import sign_in from "../signin/signin";
+import sign_in from "../../../lib/fetch/signin";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../../lib/schemas/schemas";
 
 type Props = {};
 
-const SignUpPage = (props: Props) => {
+export default function SignInPage(props: Props) {
   const [initialState, setInitialState] = useState({
     username: "",
     password: "",
@@ -129,6 +129,4 @@ const SignUpPage = (props: Props) => {
       </div>
     </div>
   );
-};
-
-export default SignUpPage;
+}

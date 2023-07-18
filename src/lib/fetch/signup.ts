@@ -1,14 +1,16 @@
-import { ServerResponse } from "../../../lib/type";
+import { ServerResponse } from "../type";
 
-interface ISignIn {
+interface ISignUp {
   username: string;
   password: string;
+  email: string;
+  confirmPassword: string;
 }
 
-export default async function sign_in(
-  signUpDetails: ISignIn
+export default async function sign_up(
+  signUpDetails: ISignUp
 ): Promise<boolean | undefined> {
-  const res = await fetch(`/api/auth/signin`, {
+  const res = await fetch(`/api/auth/signup`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -17,7 +19,6 @@ export default async function sign_in(
   });
 
   const data = (await res.json()) as ServerResponse<boolean>;
-  console.log(data.error);
 
   if (data.error && !data.data) {
     if (data.error instanceof Array) {

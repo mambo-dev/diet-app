@@ -8,13 +8,13 @@ import Button from "../../../components/ui/button";
 import { toast } from "../../../components/ui/toast";
 import { signUpSchema } from "../../../lib/schemas/schemas";
 import { z } from "zod";
-import sign_up from "./signup";
-import sign_in from "../signin/signin";
+import sign_up from "../../../lib/fetch/signup";
+import sign_in from "../../../lib/fetch/signin";
 import { useRouter } from "next/navigation";
 
 type Props = {};
 
-const SignUpPage = (props: Props) => {
+export default function SignUpPage(props: Props) {
   const [initialState, setInitialState] = useState({
     username: "",
     email: "",
@@ -150,6 +150,4 @@ const SignUpPage = (props: Props) => {
       </div>
     </div>
   );
-};
-
-export default SignUpPage;
+}
