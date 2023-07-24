@@ -10,6 +10,7 @@ import { z } from "zod";
 import sign_in from "../../../lib/fetch/signin";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../../lib/schemas/schemas";
+import { HandleError } from "../../../lib/type";
 
 type Props = {};
 
@@ -67,7 +68,14 @@ export default function SignInPage(props: Props) {
               });
             });
         } else {
-          console.log(error.message);
+          JSON.parse(error.message).forEach((error: HandleError) => {
+            toast({
+              message: error.message ?? "",
+              title: "Oops",
+              type: "error",
+              duration: 3000,
+            });
+          });
         }
 
         return;

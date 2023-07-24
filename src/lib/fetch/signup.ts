@@ -22,7 +22,7 @@ export default async function sign_up(
 
   if (data.error && !data.data) {
     if (data.error instanceof Array) {
-      throw new Error(data.error.join(""));
+      throw new Error(JSON.stringify(data.error));
     }
 
     throw new Error(data.error ?? "something unexpected happened");

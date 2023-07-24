@@ -17,15 +17,13 @@ export default async function sign_in(
   });
 
   const data = (await res.json()) as ServerResponse<boolean>;
-  console.log(data.error);
 
   if (data.error && !data.data) {
     if (data.error instanceof Array) {
-      throw new Error(data.error.join(""));
+      throw new Error(JSON.stringify(data.error));
     }
 
     throw new Error(data.error ?? "something unexpected happened");
   }
-
   return data.data;
 }

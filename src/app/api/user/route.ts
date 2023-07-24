@@ -140,7 +140,7 @@ export async function POST(request: Request): Promise<Response> {
 
 export async function GET(request: Request): Promise<
   NextResponse<{
-    data?: BioData | null;
+    data?: BioData;
     error?: HandleError | HandleError[] | null;
   }>
 > {
@@ -161,7 +161,6 @@ export async function GET(request: Request): Promise<
         { status: 400 }
       );
     }
-
     const { user, error } = await verifyAuth(access_token?.value);
 
     if (error || !user) {

@@ -11,6 +11,7 @@ import { z } from "zod";
 import sign_up from "../../../lib/fetch/signup";
 import sign_in from "../../../lib/fetch/signin";
 import { useRouter } from "next/navigation";
+import { HandleError } from "../../../lib/type";
 
 type Props = {};
 
@@ -76,13 +77,22 @@ export default function SignUpPage(props: Props) {
                 duration: 5000,
               });
             });
+        } else {
+          JSON.parse(error.message).forEach((error: HandleError) => {
+            toast({
+              message: error.message ?? "",
+              title: "Oops",
+              type: "error",
+              duration: 3000,
+            });
+          });
         }
 
         return;
       }
 
       toast({
-        message: "You did everything right could not submit your form tho",
+        message: "You did everything right but we could not submit your form",
         duration: 3000,
         title: "Server Error",
         type: "error",
