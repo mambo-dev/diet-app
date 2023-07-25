@@ -1,12 +1,12 @@
 import { Toaster } from "react-hot-toast";
-import "./globals.css";
+import "../globals.css";
 import { Inter } from "next/font/google";
-import { cn } from "../components/utils/cn";
+import { cn } from "../../components/utils/cn";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Healthy Haven",
+  title: "Healthy Haven | Welcome",
   description: "Let's help you achieve your health goals",
 };
 
