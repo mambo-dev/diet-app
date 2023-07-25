@@ -3,6 +3,9 @@ import "../globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "../../components/utils/cn";
 import SideBar from "../../components/dashboard/side-bar-nav/side-bar";
+import { cookies } from "next/headers";
+import verifyAuth from "../../lib/auth";
+import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,11 +14,21 @@ export const metadata = {
   description: "Let's help you achieve your health goals",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookie = cookies();
+
+  const access_token = cookie.get("access_token");
+
+  const { user, error } = await verifyAuth(access_token?.value);
+
+  if (!user) {
+    redirect("/auth/signin");
+  }
+
   return (
     <html
       lang="en"

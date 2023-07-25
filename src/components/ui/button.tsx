@@ -11,6 +11,7 @@ export const buttonVariants = cva(
         default:
           "bg-green-500 text-white w-full  focus:bg-green-400 hover:bg-green-600 focus:outline-none focus:ring-4 focus:border-green-600 hover:border-green-500  ring-opacity-30 ring-green-300 focus:ring-offset-0",
         ghost: "",
+        link: "bg-green-500 text-white w-full  focus:bg-green-400 hover:bg-green-600 focus:outline-none  focus:border-green-600 hover:border-green-500  ",
       },
       size: {
         default: "h-10 py-2 px-4",
