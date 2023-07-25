@@ -35,8 +35,12 @@ export default async function RootLayout({
       className={cn("bg-white text-slate-900 antialiased", inter.className)}
     >
       <body className="min-h-screen bg-white dark:bg-slate-900 antialiased flex items-start">
-        <SideBar />
-        <div className="flex-1">{children}</div>
+        <div className="fixed w-1/4 left-0 top-0 bottom-0">
+          <SideBar />
+        </div>
+        <div className="absolute right-0 top-0 bottom-0 flex-1 w-3/4 mr-auto">
+          {children}
+        </div>
         <Toaster position="top-right" />
         <div className="h-40 md:hidden" />
       </body>
