@@ -3,10 +3,13 @@ import React, { useState } from "react";
 import Button from "../../ui/button";
 import UpdateForm from "./update-form";
 import SidePanel from "../../ui/sidepanel";
+import { BioData } from "@prisma/client";
 
-type Props = {};
+type Props = {
+  bio_data: BioData;
+};
 
-export default function UpdateProfile({}: Props) {
+export default function UpdateProfile({ bio_data }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -20,7 +23,7 @@ export default function UpdateProfile({}: Props) {
         update
       </Button>
       <SidePanel isOpen={isOpen} setIsOpen={setIsOpen} title="Update Profile">
-        <UpdateForm setIsOpen={setIsOpen} />
+        <UpdateForm setIsOpen={setIsOpen} bio_data={bio_data} />
       </SidePanel>
     </>
   );

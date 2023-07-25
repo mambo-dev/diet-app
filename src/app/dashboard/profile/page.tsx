@@ -55,9 +55,9 @@ async function get_user_bio() {
 export default async function ProfilePage({}: Props) {
   const { bio_data, error } = await get_user_bio();
 
-  if (error && error.message) {
+  if ((error && error.message) || !bio_data) {
     toast({
-      message: error.message,
+      message: error.message ?? "could not find bio data",
       duration: 3000,
       title: "error",
     });
@@ -71,7 +71,7 @@ export default async function ProfilePage({}: Props) {
           Profile
         </Heading>
         <div className="w-32">
-          <UpdateProfile />
+          <UpdateProfile bio_data={bio_data} />
         </div>
       </div>
       <div className="w-full relative rounded-md h-[250px]">
