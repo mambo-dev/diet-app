@@ -6,7 +6,7 @@ import verifyAuth from "../../../lib/auth";
 import { db } from "../../../lib/prisma";
 import { toast } from "../../../components/ui/toast";
 import Paragraph from "../../../components/ui/paragraph";
-import UpdateProfile from "../../../components/dashboard/profile/page";
+import UpdateProfile from "../../../components/dashboard/profile/update-button";
 
 type Props = {};
 
