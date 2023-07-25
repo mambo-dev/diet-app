@@ -40,8 +40,6 @@ async function fetch_bio_data(): Promise<{
       error?: HandleError | HandleError[] | null;
     };
 
-    console.log("this is the data we get", data.data);
-
     if (data.error || !data.data) {
       return {
         error: "failed to get bio data",
