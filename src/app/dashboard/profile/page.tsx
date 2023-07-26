@@ -8,6 +8,11 @@ import { toast } from "../../../components/ui/toast";
 import Paragraph from "../../../components/ui/paragraph";
 import UpdateProfile from "../../../components/dashboard/profile/update-button";
 
+export const metadata = {
+  title: "Healthy Haven | Profile",
+  description: "Let's help you achieve your health goals",
+};
+
 type Props = {};
 
 async function get_user_bio() {
@@ -74,16 +79,16 @@ export default async function ProfilePage({}: Props) {
           <UpdateProfile bio_data={bio_data} />
         </div>
       </div>
-      <div className="w-full relative rounded-md h-[250px]">
+      <div className="w-full relative rounded-lg h-[250px]">
         <Image
           alt="a profile banner"
           src="/images/profile-banner.jpg"
           fill
           sizes=""
-          className="rounded-md object-cover"
+          className="rounded-lg object-cover"
         />
       </div>
-      <div className="w-full flex flex-col gap-2 relative rounded-md bg-white shadow-sm  border border-gray-300  py-2 px-2">
+      <div className="w-full flex flex-col gap-2 relative rounded-lg bg-white shadow-sm  border border-gray-300  py-2 px-2">
         <div className="grid grid-cols-3 gap-2 w-full">
           <BioDataInfo
             title="Username"

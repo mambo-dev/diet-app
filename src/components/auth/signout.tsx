@@ -22,12 +22,12 @@ export default function SignOutButton({}: Props) {
         type: "success",
         title: "Good Bye 👋",
         message: "can't wait to see you again. ",
-        duration: 5000,
+        duration: 2000,
       });
 
       setTimeout(() => {
         router.refresh();
-      }, 500);
+      }, 1500);
     } catch (error) {
       toast({
         type: "error",

@@ -80,6 +80,7 @@ export async function POST(
       }
     );
   } catch (error) {
+    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {

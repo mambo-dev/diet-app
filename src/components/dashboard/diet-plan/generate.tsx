@@ -16,7 +16,7 @@ export default function GenerateDietPlan({}: Props) {
     setIsloading(true);
     try {
       const { data, error } = await generate_diet_plan();
-
+      console.log(data, error);
       if (data) {
         toast({
           message: "succesfully generated diet plan",
@@ -41,8 +41,10 @@ export default function GenerateDietPlan({}: Props) {
           return;
         } else {
           toast({
-            //@ts-expect-error
-            message: error?.message ? error.message.message : "",
+            message: error?.message
+              ? //@ts-expect-error
+                error.message.message
+              : "something unexpected happened please refresh",
             duration: 3000,
             title: "Server Error",
             type: "error",

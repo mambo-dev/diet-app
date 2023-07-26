@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Healthy Haven",
+  title: "Healthy Haven | Dashboard",
   description: "Let's help you achieve your health goals",
 };
 
