@@ -69,9 +69,9 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
             })}
           </div>
         ) : (
-          <div className="mr-auto">
+          <div className="mr-auto text-slate-600 ">
             you currently havent added any foods to your diet,{" "}
-            <button className="outline-none text-green-600 hover:underline">
+            <button className="outline-none text-green-800 hover:underline hover:text-green-600">
               add
             </button>
           </div>
