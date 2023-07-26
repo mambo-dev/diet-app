@@ -41,6 +41,9 @@ export default async function get_diet_plan(): Promise<{
       },
     };
   }
-  //@ts-expect-error
-  return data.data?.data;
+
+  return {
+    //@ts-expect-error
+    data: data.data,
+  };
 }
