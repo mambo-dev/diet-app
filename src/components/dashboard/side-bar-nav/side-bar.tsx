@@ -15,6 +15,7 @@ import {
   User,
   UtensilsCrossed,
 } from "lucide-react";
+import SignOutButton from "../../auth/signout";
 
 type Props = {};
 
@@ -133,7 +134,9 @@ export default async function SideBar({}: Props) {
             );
           })}
         </ul>
-        <div className="mb-0">.</div>
+        <div className="mt-full mb-0 ">
+          <SignOutButton />
+        </div>
       </div>
     </div>
   );
