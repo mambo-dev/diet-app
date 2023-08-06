@@ -6,6 +6,7 @@ import Heading from "../../ui/heading";
 import Paragraph from "../../ui/paragraph";
 import Modal from "../../ui/modal";
 import SearchFood from "../food/search-food";
+import DeleteDietPlan from "./delete-plan";
 
 type Props = {
   diet_plan: DietPlan & {
@@ -19,7 +20,7 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
   return (
     <>
       <div className="w-full h-fit py-2 px-2  flex flex-col gap-3 items-center border border-slate-300 rounded-lg bg-white shadow">
-        <div className=" flex items-end justify-center gap-x-2 w-fit mr-auto ">
+        <div className="relative flex items-end justify-center gap-x-2 w-fit mr-auto ">
           <div className="mr-auto relative w-20 h-20  ">
             <Image
               alt="diet display"
@@ -42,6 +43,9 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
               <strong>{diet_plan.dietplan_mainMeals}</strong> main meals and{" "}
               <strong>{diet_plan.dietplan_snacks}</strong> snacks
             </Paragraph>
+          </div>
+          <div className="absolute top-2 right-0 w-fit ">
+            <DeleteDietPlan />
           </div>
         </div>
         <div className="w-full">
