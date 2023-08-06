@@ -10,6 +10,7 @@ type Props = {};
 
 export default async function MealPlanPage({}: Props) {
   const { data } = await get_meal_plan();
+  console.log("i get this data", data);
   return (
     <div className="flex py-10 w-full flex-col gap-2">
       <div className="flex w-full items-center justify-between px-4 ">

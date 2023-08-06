@@ -1,5 +1,5 @@
 import "server-only";
-import { Meal, MealPlan } from "@prisma/client";
+import { Food, Meal, MealPlan } from "@prisma/client";
 import { HandleError, ServerResponse } from "../../type";
 import { cookies } from "next/headers";
 
@@ -30,7 +30,9 @@ export default async function get_meal_plan(): Promise<{
   const data = (await res.json()) as ServerResponse<{
     data?:
       | (MealPlan & {
-          mealplan_meal: Meal[];
+          mealplan_meal: Meal[] & {
+            meal_food: Food[];
+          };
         })
       | null;
   }>;
