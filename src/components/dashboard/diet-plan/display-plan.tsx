@@ -70,9 +70,24 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
         <div className="w-full">
           {diet_plan.diet_plan_food.length > 0 ? (
             <div>
-              {diet_plan.diet_plan_food.map((food) => {
-                return <DietFood key={food.food_id} food={food.food_name} />;
-              })}
+              <div className="mr-auto text-slate-600 ">
+                you currently have{" "}
+                {diet_plan.diet_plan_food.length <= 1
+                  ? `${diet_plan.diet_plan_food.length} food `
+                  : `${diet_plan.diet_plan_food.length} foods `}{" "}
+                in your diet{" "}
+                <button
+                  onClick={() => setOpenAddFoodModal(true)}
+                  className="outline-none text-green-500 font-bold hover:underline hover:text-green-600"
+                >
+                  add more
+                </button>
+              </div>
+              <div className="mt-2 grid grid-cols-4 gap-3">
+                {diet_plan.diet_plan_food.map((food) => {
+                  return <DietFood key={food.food_id} food={food.food_name} />;
+                })}
+              </div>
             </div>
           ) : (
             <div className="mr-auto text-slate-600 ">
@@ -101,7 +116,7 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
 
 function DisplayStat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="flex items-center justify-start gap-4">
+    <div className="flex items-center justify-start gap-4 ">
       <Paragraph size="sm">
         {label}: <strong>{value}</strong>
       </Paragraph>
@@ -110,5 +125,9 @@ function DisplayStat({ label, value }: { label: string; value: number }) {
 }
 
 function DietFood({ food }: { food: string }) {
-  return <span>{food}</span>;
+  return (
+    <span className="rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3 ">
+      {food}
+    </span>
+  );
 }

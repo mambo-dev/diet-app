@@ -2,6 +2,8 @@
 import { Loader2, Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "../../ui/toast";
+import add_food_to_diet from "../../../lib/fetch/dietplan/addfoodtodiet";
+import Cookies from "js-cookie";
 
 type Props = { food_nix_id: string };
 
@@ -12,13 +14,19 @@ export default function AddFoodToDiet({ food_nix_id }: Props) {
   const addFood = async (selected_id: string) => {
     setIsLoading(true);
     try {
+      const access_token = Cookies.get("access_token") ?? "";
+
+      await add_food_to_diet(selected_id, access_token);
+
       toast({
         title: "Success",
         message: "We have added this food to you diet",
         type: "success",
       });
       setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error);
+
       toast({
         title: "Server Error",
         message: "Oops sorry - You did everything right try again ",
