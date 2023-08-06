@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Paragraph from "../../ui/paragraph";
 import AddNewMeal from "./addnewmeal";
 import { PlusCircle } from "lucide-react";
+import DisplayMeals from "./displaymeals";
 
 type Props = {
   meal_plan: MealPlan & {
@@ -36,6 +37,9 @@ export default function DisplayMealPlan({ meal_plan }: Props) {
         </button>
       </div>
       {openAddNewMeal && <AddNewMeal meal_plan={meal_plan} />}
+      {meal_plan.mealplan_meal.length > 0 && (
+        <DisplayMeals meals={meal_plan.mealplan_meal} />
+      )}
     </div>
   );
 }

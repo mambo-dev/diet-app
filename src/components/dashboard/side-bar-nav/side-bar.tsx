@@ -27,7 +27,11 @@ async function fetch_bio_data(): Promise<{
 
   const access_token = cookie.get("access_token");
   try {
-    const res = await fetch(`http://localhost:3000/api/user`, {
+    if (process.env.NEXT_PUBLIC_URL) {
+      throw new Error("no public url");
+    }
+
+    const res = await fetch(`/api/user`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

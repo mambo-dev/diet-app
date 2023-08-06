@@ -1,7 +1,7 @@
 import { ServerResponse } from "../../type";
 
 export default async function delete_diet_plan(access_token: string) {
-  const res = await fetch(`http://localhost:3000/api/diet-plan/delete`, {
+  const res = await fetch(`/api/diet-plan/delete`, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json",

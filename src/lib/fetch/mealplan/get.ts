@@ -15,14 +15,17 @@ export default async function get_meal_plan(): Promise<{
 
   const access_token = cookie.get("access_token");
 
-  const res = await fetch(`http://localhost:3000/api/meal-plan/get-meal-plan`, {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-      Cookie: `access_token=${access_token?.value}`,
-    },
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/meal-plan/get-meal-plan`,
+    {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Cookie: `access_token=${access_token?.value}`,
+      },
+      credentials: "include",
+    }
+  );
 
   const data = (await res.json()) as ServerResponse<{
     data?:

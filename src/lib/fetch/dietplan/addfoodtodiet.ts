@@ -8,18 +8,15 @@ export default async function add_food_to_diet(
     const body = {
       id: nix_id,
     };
-    const res = await fetch(
-      `http://localhost:3000/api/food/add-food-to-diet-plan`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Cookie: `access_token=${access_token}`,
-        },
-        body: JSON.stringify(body),
-        credentials: "include",
-      }
-    );
+    const res = await fetch(`/api/food/add-food-to-diet-plan`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Cookie: `access_token=${access_token}`,
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
 
     const data = (await res.json()) as ServerResponse<boolean>;
     console.log(JSON.stringify(body));

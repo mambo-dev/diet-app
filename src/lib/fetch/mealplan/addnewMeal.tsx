@@ -7,7 +7,7 @@ interface NewMeal {
 }
 
 export default async function add_new_meal(newMeal: NewMeal) {
-  const res = await fetch(`http://localhost:3000/api/meal-plan/meal/add-meal`, {
+  const res = await fetch(`/api/meal-plan/meal/add-meal`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",

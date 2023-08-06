@@ -13,7 +13,7 @@ export default async function get_diet_plan(): Promise<{
 
   const access_token = cookie.get("access_token");
 
-  const res = await fetch(`http://localhost:3000/api/diet-plan/get-diet-plan`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/diet-plan/get-diet-plan`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",

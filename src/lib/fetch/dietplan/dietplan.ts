@@ -5,7 +5,7 @@ export default async function generate_diet_plan(): Promise<{
   data?: boolean;
   error?: HandleError | HandleError[];
 }> {
-  const res = await fetch(`http://localhost:3000/api/diet-plan/generate`, {
+  const res = await fetch(`/api/diet-plan/generate`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
