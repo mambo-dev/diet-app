@@ -29,7 +29,7 @@ export default function DeleteDietPlan({}: Props) {
       setTimeout(() => {
         setOpenWarning(false);
         router.refresh();
-      }, 3000);
+      }, 500);
     } catch (error) {
       console.log(error);
 

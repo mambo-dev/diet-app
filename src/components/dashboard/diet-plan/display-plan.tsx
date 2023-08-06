@@ -7,6 +7,7 @@ import Paragraph from "../../ui/paragraph";
 import Modal from "../../ui/modal";
 import SearchFood from "../food/search-food";
 import DeleteDietPlan from "./delete-plan";
+import RemoveFoodFromPlan from "./removefoodfromplan";
 
 type Props = {
   diet_plan: DietPlan & {
@@ -89,7 +90,13 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
               </div>
               <div className="mt-2 grid grid-cols-4 gap-3">
                 {diet_plan.diet_plan_food.map((food) => {
-                  return <DietFood key={food.food_id} food={food.food_name} />;
+                  return (
+                    <DietFood
+                      key={food.food_id}
+                      food_name={food.food_name}
+                      food_id={food.food_id}
+                    />
+                  );
                 })}
               </div>
             </div>
@@ -128,10 +135,17 @@ function DisplayStat({ label, value }: { label: string; value: number }) {
   );
 }
 
-function DietFood({ food }: { food: string }) {
+function DietFood({
+  food_name,
+  food_id,
+}: {
+  food_name: string;
+  food_id: number;
+}) {
   return (
-    <span className="rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3 ">
-      {food}
-    </span>
+    <div className=" group flex items-center justify-between rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3 ">
+      {food_name}
+      <RemoveFoodFromPlan food_id={food_id} />
+    </div>
   );
 }
