@@ -4,6 +4,7 @@ import { FolderPlus } from "lucide-react";
 import EmptyState from "../../../components/ui/empty";
 import GenerateMealPlan from "../../../components/dashboard/meal-plan/generatemealplan";
 import Heading from "../../../components/ui/heading";
+import DisplayMealPlan from "../../../components/dashboard/meal-plan/displaymealplan";
 
 type Props = {};
 
@@ -30,7 +31,7 @@ export default async function MealPlanPage({}: Props) {
             subTitle="Set a meal plan for the week"
           />
         ) : (
-          <div>meal plan</div>
+          <DisplayMealPlan meal_plan={data} />
         )}
       </div>
     </div>

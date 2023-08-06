@@ -1,12 +1,14 @@
 import "server-only";
-import { DietPlan, Food, Meal, MealPlan } from "@prisma/client";
+import { Meal, MealPlan } from "@prisma/client";
 import { HandleError, ServerResponse } from "../../type";
 import { cookies } from "next/headers";
 
 export default async function get_meal_plan(): Promise<{
-  data?: DietPlan & {
-    diet_plan_food: Food[];
-  };
+  data?:
+    | MealPlan & {
+        mealplan_meal: Meal[];
+      };
+
   error?: HandleError | HandleError[];
 }> {
   const cookie = cookies();

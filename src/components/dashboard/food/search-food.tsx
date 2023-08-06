@@ -5,10 +5,22 @@ import { Loader2 } from "lucide-react";
 import useDebounce from "../../hooks/debounce";
 import Paragraph from "../../ui/paragraph";
 import AddFoodToDiet from "./add-food-to-diet";
+import AddFoodToMeal from "./addfoodtomeal";
 
-type Props = {};
+type Props = {
+  type: "diet" | "mealplan";
+  setFoodsMealPlan?: React.Dispatch<
+    React.SetStateAction<
+      {
+        food_name: string;
+        food_id: string;
+      }[]
+    >
+  >;
+};
 
-export default function SearchFood({}: Props) {
+//lessons why you need some global state management i.e setFoodIDs
+export default function SearchFood({ type, setFoodsMealPlan }: Props) {
   const [searchInput, setSearchInput] = useState("");
   const [foods, setFoods] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,9 +76,11 @@ export default function SearchFood({}: Props) {
           {foods.map((food: any) => {
             return (
               <Food
+                type={type}
                 key={food.nix_item_id}
                 food_name={food.food_name}
                 food_nix_id={food.nix_item_id}
+                setFoodsMealPlan={setFoodsMealPlan}
               />
             );
           })}
@@ -85,16 +99,37 @@ export default function SearchFood({}: Props) {
 function Food({
   food_name,
   food_nix_id,
+  type,
+  setFoodsMealPlan,
 }: {
   food_name: string;
   food_nix_id: string;
+  type: "diet" | "mealplan";
+  setFoodsMealPlan?: React.Dispatch<
+    React.SetStateAction<
+      {
+        food_name: string;
+        food_id: string;
+      }[]
+    >
+  >;
 }) {
   return (
     <div className=" py-2 text-slate-800 text-left px-2 w-full flex items-center justify-between hover:cursor-pointer hover:text-green-500 hover:bg-neutral-100   ">
       <Paragraph size="sm" className=" text-left font-medium  mr-auto text-sm ">
         {food_name}
       </Paragraph>
-      <AddFoodToDiet food_nix_id={food_nix_id} />
+      {type === "diet" ? (
+        <AddFoodToDiet food_nix_id={food_nix_id} />
+      ) : (
+        <AddFoodToMeal
+          newFood={{
+            food_id: food_nix_id,
+            food_name,
+          }}
+          setFoodsMealPlan={setFoodsMealPlan}
+        />
+      )}
     </div>
   );
 }

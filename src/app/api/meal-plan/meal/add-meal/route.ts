@@ -9,12 +9,7 @@ import { db } from "../../../../../lib/prisma";
 import find_food from "../../../../../lib/food/find-food";
 import get_food from "../../../../../lib/food/fetch-food";
 import save_food from "../../../../../lib/food/save-food";
-
-export const add_meal_schema = z.object({
-  food_items_ids: z.array(z.string().min(1, "please provide a food id ")),
-  meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
-  meal_day_of_week: z.string().transform((week) => new Date(week)),
-});
+import { add_meal_schema } from "../../../../../lib/schemas/schemas";
 
 export async function POST(request: Request): Promise<
   NextResponse<{
@@ -156,6 +151,7 @@ export async function POST(request: Request): Promise<
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         error: {

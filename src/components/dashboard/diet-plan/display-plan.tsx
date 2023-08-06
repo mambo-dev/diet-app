@@ -119,7 +119,7 @@ export default function DisplayDietPlan({ diet_plan }: Props) {
         setIsOpen={setOpenAddFoodModal}
         title="Search foods"
       >
-        <SearchFood />
+        <SearchFood type="diet" />
       </Modal>
     </>
   );

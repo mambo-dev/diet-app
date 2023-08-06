@@ -9,7 +9,7 @@ import update_bio_data from "../../../lib/fetch/profile";
 import { BioData } from "@prisma/client";
 import { Input } from "../../ui/input";
 import Cookies from "js-cookie";
-import SelectLifestyle from "../../ui/select";
+import SelectLifestyle from "../../ui/selectone";
 import Paragraph from "../../ui/paragraph";
 import Button from "../../ui/button";
 

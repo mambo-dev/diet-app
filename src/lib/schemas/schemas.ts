@@ -62,3 +62,9 @@ export const bioDataSchema = z.object({
   ]),
   goals: z.array(z.string()),
 });
+
+export const add_meal_schema = z.object({
+  food_items_ids: z.array(z.string().min(1, "please provide a food id ")),
+  meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
+  meal_day_of_week: z.string().transform((week) => new Date(week)),
+});
