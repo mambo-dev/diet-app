@@ -12,46 +12,21 @@ type Props = {};
 export default function GenerateDietPlan({}: Props) {
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
+
   const generateDietPlan = async () => {
     setIsloading(true);
     try {
       const { data, error } = await generate_diet_plan();
-      console.log(data, error);
-      if (data) {
-        toast({
-          message: "succesfully generated diet plan",
-          type: "success",
-          title: "Yeei!! Lets gooo",
-        });
 
-        setTimeout(() => {
-          router.refresh();
-        }, 500);
-      } else {
-        if (error instanceof Array) {
-          error.forEach((error: HandleError) => {
-            toast({
-              //@ts-expect-error
-              message: error.message.message ?? "",
-              title: "Oops",
-              type: "error",
-              duration: 3000,
-            });
-          });
-          return;
-        } else {
-          toast({
-            message: error?.message
-              ? //@ts-expect-error
-                error.message.message
-              : "something unexpected happened please refresh",
-            duration: 3000,
-            title: "Server Error",
-            type: "error",
-          });
-          return;
-        }
-      }
+      toast({
+        message: "succesfully generated diet plan",
+        type: "success",
+        title: "Yeei!! Lets gooo",
+      });
+
+      setTimeout(() => {
+        router.refresh();
+      }, 500);
     } catch (error) {
       if (error instanceof Error) {
         JSON.parse(error.message).forEach((error: HandleError) => {
