@@ -101,20 +101,23 @@ export async function POST(request: Request): Promise<
 
     const { food_items_ids, meal_type, meal_day_of_week } =
       add_meal_schema.parse(body);
-const foods_to_add:number[] = []
-    food_items_ids.forEach(async (id) => {
+
+const foods_to_add = food_items_ids.map(async (id) => {
       const food = await find_food(id);
       if (!food) {
         const food_from_api = await get_food(id);
         const new_food = await save_food(food_from_api, user.user_id);
 
-      foods_to_add.push(new_food.food_id)
+      
+      return new_food.food_id
       } else {
-     foods_to_add.push(food.food_id)
+        return food.food_id
       }
     });
 
-console.log(foods_to_add)
+
+
+console.log(Promise.all(foods_to_add))
 
     return NextResponse.json(
       {
