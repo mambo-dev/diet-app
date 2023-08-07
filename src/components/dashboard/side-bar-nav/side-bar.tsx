@@ -31,7 +31,7 @@ async function fetch_bio_data(): Promise<{
       throw new Error("no public url");
     }
 
-    const res = await fetch(`/api/user`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

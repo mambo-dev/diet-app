@@ -102,22 +102,46 @@ export async function POST(request: Request): Promise<
     const { food_items_ids, meal_type, meal_day_of_week } =
       add_meal_schema.parse(body);
 
-const foods_to_add = food_items_ids.map(async (id) => {
-      const food = await find_food(id);
-      if (!food) {
-        const food_from_api = await get_food(id);
-        const new_food = await save_food(food_from_api, user.user_id);
+const food_ids_to_add = await Promise.all(food_items_ids.map(async (id) => {
+  const food = await find_food(id);
+  if (!food) {
+    const food_from_api = await get_food(id);
+    const new_food = await save_food(food_from_api, user.user_id);
 
-      
-      return new_food.food_id
-      } else {
-        return food.food_id
+  
+  return new_food.food_id
+  } else {
+    return food.food_id
+  }
+}));
+
+const new_meal = await db.meal.create({data:{
+mealplan_day_of_week:meal_day_of_week,
+    meal_type,
+    meal_meal_plan:{
+      connect:{
+        mealplan_id:find_user_current_meal_plan.mealplan_id
       }
-    });
+    }
+  
+}})
+
+food_ids_to_add.forEach(async(id:number)=>{
+  await db.food.update({
+    where:{
+      food_id:id
+    },
+    data:{
+      Meal:{
+        connect:{
+          meal_id:new_meal.meal_id
+        }
+      }
+    }
+  })
+})
 
 
-
-console.log(Promise.all(foods_to_add))
 
     return NextResponse.json(
       {
