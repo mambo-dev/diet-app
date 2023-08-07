@@ -15,13 +15,13 @@ export function DatePicker({
 }: {
   date: Date | undefined;
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-  fromDate: Date | undefined;
-  toDate: Date | undefined;
+  fromDate?: Date | undefined;
+  toDate?: Date | undefined;
 }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="text-sm gap-2  group inline-flex items-center bg-white justify-center outline-none  h-fit rounded-full  rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3">
+        <button className="text-sm gap-2  group inline-flex items-center bg-white justify-center outline-none  h-fit   rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3">
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "eeee") : <span>Pick a date</span>}
         </button>

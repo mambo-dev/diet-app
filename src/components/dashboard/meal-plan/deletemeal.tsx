@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import delete_meal from "../../../lib/fetch/mealplan/deleteMeal";
 
+
 export default function DeleteMeal({meal_id}:{
     meal_id:number
 }){

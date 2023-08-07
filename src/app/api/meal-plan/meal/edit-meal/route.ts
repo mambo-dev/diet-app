@@ -8,11 +8,9 @@ import { HandleError } from "../../../../../lib/type";
 import find_food from "../../../../../lib/food/find-food";
 import get_food from "../../../../../lib/food/fetch-food";
 import save_food from "../../../../../lib/food/save-food";
+import { add_meal_schema } from "../../../../../lib/schemas/schemas";
 
-export const create_meal_schema = z.object({
-  food_items_ids: z.array(z.string().min(1, "please provide a food id ")),
-  meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
-});
+
 
 export async function PUT(request: Request): Promise<
   NextResponse<{
@@ -87,44 +85,47 @@ export async function PUT(request: Request): Promise<
       );
     }
 
-    const { food_items_ids, meal_type } = create_meal_schema.parse(body);
+    const { food_items_ids, meal_type, meal_day_of_week } = add_meal_schema.parse(body);
 
-    food_items_ids.forEach(async (id) => {
+    const food_ids_to_add = await Promise.all(food_items_ids.map(async (id) => {
       const food = await find_food(id);
       if (!food) {
         const food_from_api = await get_food(id);
         const new_food = await save_food(food_from_api, user.user_id);
-
-        await db.meal.update({
-          where: {
-            meal_id: Number(meal_id),
-          },
-          data: {
-            meal_type,
-            meal_food: {
-              connect: {
-                food_id: new_food.food_id,
-              },
-            },
-          },
-        });
+    
+      
+      return new_food.food_id
       } else {
-        await db.meal.update({
-          where: {
-            meal_id: Number(meal_id),
-          },
-          data: {
-            meal_type,
-            meal_food: {
-              connect: {
-                food_id: food.food_id,
-              },
-            },
-          },
-        });
+        return food.food_id
       }
-    });
-
+    }));
+    
+    const update_meal = await db.meal.update({
+      where:{
+        meal_id:Number(meal_id)
+      },
+      data:{
+        mealplan_day_of_week:meal_day_of_week,
+        meal_type,
+       
+      
+    }})
+    
+    food_ids_to_add.forEach(async(id:number)=>{
+      await db.food.update({
+        where:{
+          food_id:id
+        },
+        data:{
+          Meal:{
+            connect:{
+              meal_id:update_meal.meal_id
+            }
+          }
+        }
+      })
+    })
+    
     return NextResponse.json(
       {
         data: true,

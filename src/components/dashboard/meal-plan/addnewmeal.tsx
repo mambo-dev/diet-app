@@ -10,9 +10,10 @@ import { Loader2, PlusCircle, X } from "lucide-react";
 import Modal from "../../ui/modal";
 import SearchFood from "../food/search-food";
 import Button from "../../ui/button";
-import add_new_meal from "../../../lib/fetch/mealplan/addnewMeal";
+
 import { add_meal_schema } from "../../../lib/schemas/schemas";
 import { z } from "zod";
+import add_new_meal from "../../../lib/fetch/mealplan/addnewMeal";
 
 type Props = {
   meal_plan: MealPlan & {
@@ -106,7 +107,7 @@ export default function AddNewMeal({ meal_plan }: Props) {
             <button
               type="button"
               onClick={() => setOpenFoodSearch(true)}
-              className="text-sm gap-2  group inline-flex items-center bg-white justify-center outline-none  h-fit rounded-full  rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3"
+              className="text-sm gap-2  group inline-flex items-center bg-white justify-center outline-none  h-fit   rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3"
             >
               <PlusCircle className="h-5 w-5  text-slate-500 group-hover:text-slate-800  " />
               Add food to meal
@@ -154,7 +155,7 @@ export default function AddNewMeal({ meal_plan }: Props) {
   );
 }
 
-function RemoveFoodFromMeal({
+export function RemoveFoodFromMeal({
   food_id,
   setFoods,
 }: {

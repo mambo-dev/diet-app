@@ -6,6 +6,7 @@ import Paragraph from "../../ui/paragraph";
 import { db } from "../../../lib/prisma";
 import { Trash2 } from "lucide-react";
 import DeleteMeal from "./deletemeal";
+import EditMeal from "./editmeal";
 
 type Meal = DbMeal & {
   meal_food:Food[]
@@ -86,7 +87,8 @@ function DisplayMeal({ meal }: { meal: Meal }) {
     <div className="flex h-full flex-col rounded-lg border border-slate-300 py-2 px-2">
       <div  className="w-full flex items-center justify-between">
       <span>{meal.meal_type}</span>
-      <div  className="w-fit flex items-center gap-4">
+      <div  className="w-fit flex items-center gap-1">
+        <EditMeal meal={meal} />
         <DeleteMeal meal_id={meal.meal_id} />
       </div>
       </div>

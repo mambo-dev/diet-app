@@ -7,11 +7,13 @@ export default function Modal({
   setIsOpen,
   children,
   title,
+  size
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: any;
   title: string;
+  size?:string
 }) {
   function closeModal() {
     setIsOpen(false);
@@ -48,7 +50,7 @@ export default function Modal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className={`w-full ${size ? size : "max-w-md"} transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all`}>
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
