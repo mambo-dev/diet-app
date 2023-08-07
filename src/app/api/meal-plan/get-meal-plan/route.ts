@@ -75,13 +75,18 @@ export async function GET(request: Request): Promise<
       where: {
         mealplan_diet_plan_id: find_user_diet_plan.dietplan_id,
       },
+      
       include: {
         mealplan_meal: {
+          orderBy:{
+            mealplan_day_of_week:"asc"
+          },
           include: {
             meal_food: true,
           },
         },
       },
+      
     });
 
     if (!find_user_current_meal_plan) {
