@@ -27,7 +27,7 @@ async function fetch_bio_data(): Promise<{
 
   const access_token = cookie.get("access_token");
   try {
-    if (process.env.NEXT_PUBLIC_URL) {
+    if (!process.env.NEXT_PUBLIC_URL) {
       throw new Error("no public url");
     }
 
