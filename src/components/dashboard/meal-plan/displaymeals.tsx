@@ -45,9 +45,10 @@ export default function DisplayMeals({ meals }: Props) {
   return (
     <div className="w-full  flex items-start gap-2 flex-col justify-center ">
       {Object.keys(groupedMeals(meals)).map((day, index) => {
+        console.log(groupedMeals);
         return (
           <div
-            className="w-full flex flex-col  bg-white justify-center outline-none  h-fit rounded-full  rounded-lg border border-slate-300   py-2 px-3 "
+            className="w-full flex flex-col  bg-white justify-center outline-none  h-fit rounded-lg border border-slate-300   py-2 px-3 "
             key={index}
           >
             <div className="w-full flex flex-col items-center justify-between">

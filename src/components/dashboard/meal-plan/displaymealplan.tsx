@@ -30,7 +30,7 @@ export default function DisplayMealPlan({ meal_plan }: Props) {
         <button
           type="button"
           onClick={() => setOpenAddNewMeal(!openAddNewMeal)}
-          className="text-sm gap-2  group inline-flex items-center bg-white justify-center outline-none  h-fit rounded-full  rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3"
+          className="text-sm gap-2  group inline-flex items-center bg-white justify-center outline-none  h-fit   rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3"
         >
           <PlusCircle className="h-5 w-5  text-slate-500 group-hover:text-slate-800  " />
           add new meal

@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import SelectLifestyle from "../../ui/selectone";
 import Paragraph from "../../ui/paragraph";
 import Button from "../../ui/button";
+import { SelectInput } from "../../ui/selectshad";
 
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -188,20 +189,20 @@ export default function UpdateForm({ setIsOpen, bio_data }: Props) {
         />
       </div>
       <div className="grid relative grid-cols-1 md:grid-cols-3 gap-2 w-full">
-        <div className=" w-full h-fit">
-          <SelectLifestyle
-            options={[
+     
+        <div className="relative flex flex-col gap-2 w-full ">
+        <label className="font-medium text-slate-800">Lifestyle</label>
+        <SelectInput values={[
               "sedentary",
               "lightly active",
               "moderately active",
               "very active",
               "extra active",
-            ]}
-            defaultOption={initialState.activityLevel}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
+            ]} setValue={setSelectedOption}   profile />
         </div>
+         
+          
+   
 
         <div className="col-span-2 w-full">
           <Input
