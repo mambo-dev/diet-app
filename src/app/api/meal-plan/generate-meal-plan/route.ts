@@ -82,17 +82,14 @@ export async function GET(request: Request): Promise<
       }
     }
 
-    const user_week_days = eachDayOfInterval({
-      start: addDays(new Date(), 1),
-      end: addDays(new Date(), 7),
-    });
+ 
 
     // generate a meal for each meal plus snacks
 
    
     await db.mealPlan.create({
       data: {
-        mealplan_start: new Date(),
+        mealplan_start: addDays(new Date(), 1),
         mealplan_end: addDays(new Date(), 7),
         mealplan_diet_plan: {
           connect: {
