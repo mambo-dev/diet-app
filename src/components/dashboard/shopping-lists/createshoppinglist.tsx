@@ -6,6 +6,9 @@ import SidePanel from "../../ui/sidepanel";
 import { Loader2, PlusCircle, X } from "lucide-react";
 import { Input } from "../../ui/input";
 import { toast } from "../../ui/toast";
+import create_shopping_list from "../../../lib/fetch/shoppinglist/create";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -35,24 +38,29 @@ export default function CreateShoppingList({}: Props) {
 function CreateShoppingListForm() {
   const [listItem, setListItem] = useState("");
   const [listItems, setListItems] = useState<string[]>([]);
-const [isLoading,setIsLoading] = useState(false)
-  async function createNewShoppingList(e: React.FormEvent<HTMLFormElement>){
-    e.preventDefault()
-    setIsLoading(true)
-try {
-    
-} catch (error) {
-    toast({
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  async function createNewShoppingList(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+        const access_token = Cookies.get("access_token") ?? "";
+      await create_shopping_list({ shopping_items: listItems }, access_token);
+    } catch (error) {
+      toast({
         title: "Server Error",
         message: "failed to create shopping list",
         type: "error",
       });
-}finally{
-    setIsLoading(false)
-}
-  } 
+    } finally {
+      setIsLoading(false);
+    }
+  }
   return (
-    <form onSubmit={createNewShoppingList} className="w-full flex flex-col gap-3">
+    <form
+      onSubmit={createNewShoppingList}
+      className="w-full flex flex-col gap-3"
+    >
       <div className="w-full flex items-center gap-2">
         <Input
           value={listItem}

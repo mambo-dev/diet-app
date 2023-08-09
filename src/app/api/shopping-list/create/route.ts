@@ -6,7 +6,7 @@ import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
 
 export const create_shopping_list = z.object({
-  ingridient_items: z
+  shopping_items: z
     .array(z.string().min(1, "please provide the food item"))
     .nonempty("you should have atleast one food item "),
 });
@@ -91,11 +91,11 @@ export async function POST(request: Request): Promise<
       );
     }
 
-    const { ingridient_items } = create_shopping_list.parse(body);
+    const { shopping_items } = create_shopping_list.parse(body);
 
     await db.shoppingList.create({
       data: {
-        shopping_list_ingridients: ingridient_items,
+        shopping_list_ingridients: shopping_items,
         shopping_list_mealplan: {
           connect: {
             mealplan_id: current_meal_plan.mealplan_id,
