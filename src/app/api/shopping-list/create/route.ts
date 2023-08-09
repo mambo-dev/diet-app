@@ -111,6 +111,7 @@ export async function POST(request: Request): Promise<
       { status: 200 }
     );
   } catch (error) {
+  console.log(error)
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {

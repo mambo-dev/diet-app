@@ -19,6 +19,7 @@ model User {
   user_meal_plan      MealPlan[]
   user_progress       Progress[]
   user_bio_data       BioData?
+  DietAdherence       DietAdherence[]
 }
 
 model BioData {
@@ -126,24 +127,39 @@ model MealPlan {
   mealplan_end            DateTime
   mealplan_customizedMeal CustomizedMeal[]
   mealplan_meal           Meal[]
-  mealplan_shopping_list  ShoppingList?
+  mealplan_shopping_list  ShoppingList[]
 }
 
 model SavedMealPlan {
   savedmealplan_id Int @id @default(autoincrement())
 }
 
-model Progress {
-  progress_id           Int      @id @default(autoincrement())
-  progress_user         User     @relation(fields: [progress_user_id], references: [user_id], onDelete: Cascade)
-  progress_user_id      Int
-  progress_weight       Float
-  progress_measurements String[]
-}
-
 model ShoppingList {
   shopping_list_id          Int      @id @default(autoincrement())
   shopping_list_ingridients String[]
   shopping_list_mealplan    MealPlan @relation(fields: [shopping_list_mealplan_id], references: [mealplan_id], onDelete: Cascade)
-  shopping_list_mealplan_id Int      @unique
+  shopping_list_mealplan_id Int
+}
+
+model DietAdherence {
+  diet_adherence_id      Int      @id @default(autoincrement())
+  diet_adherence_date    DateTime
+  diet_adherence_adhered Boolean
+  diet_adherance_notes   String?
+  diet_adherance_user_id Int
+  diet_adherance_user    User     @relation(fields: [diet_adherance_user_id], references: [user_id], onDelete: Cascade)
+}
+
+model Progress {
+  progress_id          Int      @id @default(autoincrement())
+  progress_date        DateTime
+  progress_weight      Float
+  progress_waist       Float
+  progress_hips        Float
+  progress_energyLevel String
+  progress_mood        String
+  progress_exercise    String
+  progress_notes       String?
+  progress_user        User     @relation(fields: [progress_user_id], references: [user_id], onDelete: Cascade)
+  progress_user_id     Int
 }
