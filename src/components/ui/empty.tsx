@@ -7,7 +7,7 @@ type Props = {
   icon: any;
   title: string;
   subTitle: string;
-  action: any;
+  action?: any;
 };
 
 export default function EmptyState({ icon, title, subTitle, action }: Props) {
