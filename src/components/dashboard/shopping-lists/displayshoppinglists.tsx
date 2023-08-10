@@ -15,17 +15,24 @@ export default function DisplayShoppingLists({ shoppingLists }: Props) {
         .map((list) => {
           return (
             <div
-              className="w-full py-2 px-1 border border-slate-300 rounded-lg"
+              className="w-full py-2 px-1 border max-h-[300px]  border-slate-300 rounded-lg"
               key={list.shopping_list_id}
             >
               <div className="flex items-center justify-between w-full ">
-                <span className="h-6 w-6 rounded-full border-slate-300">
+                <span className="h-8 w-8 rounded-full shadow flex items-center justify-center font-semibold border border-slate-300">
                   {list.shopping_list_id}
                 </span>
                 <div className="w-fit flex items-center gap-2">
                   <EditShoppingList shoppingListId={list.shopping_list_id} />
                 </div>
               </div>
+              <ul className="list-disc text-sm  ">
+                {list.shopping_list_ingridients.map((ingridient, index) => (
+                  <li className="list-disc" key={index}>
+                    {ingridient}
+                  </li>
+                ))}
+              </ul>
             </div>
           );
         })}
