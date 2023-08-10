@@ -1,47 +1,47 @@
 "use client";
+import { Progress } from "@prisma/client";
 import React, { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { z } from "zod";
 import { log_progress_schema } from "../../../lib/schemas/schemas";
 import { toast } from "../../ui/toast";
-import { log_progress } from "../../../lib/fetch/statistics/log-progress/progress";
-import Cookies from "js-cookie";
-import { Input } from "../../ui/input";
 import { DatePicker } from "../../ui/datepicker";
-import { SelectInput } from "../../ui/selectshad";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import { Input } from "../../ui/input";
+import { EnergyLevel } from "./logprogress";
 import Button from "../../ui/button";
+import Cookies from "js-cookie";
+import { edit_progress } from "../../../lib/fetch/statistics/log-progress/progress";
+import Modal from "../../ui/modal";
 
-type Props = {};
+type Props = {
+  progress: Progress;
+};
 
-export default function LogProgress({}: Props) {
+export default function EditProgress({ progress }: Props) {
+  const [openEditProgress, setOpenEditProgress] = useState(false);
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button className="w-full py-2 border border-slate-300 px-2 inline-flex items-center justify-center shadow-sm bg-white rounded-lg outline-none focus:shadow text-sm font-semibold text-slate-700">
-          Log progress
-        </button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <LogProgressForm />
-      </PopoverContent>
-    </Popover>
+    <>
+      <button
+        className="w-full text-sm hover:bg-slate-300 rounded-md py-2 px-1 inline-flex items-start justify-center"
+        onClick={() => setOpenEditProgress(true)}
+      >
+        Edit progress
+      </button>
+      <Modal
+        title="Edit progress"
+        isOpen={openEditProgress}
+        setIsOpen={setOpenEditProgress}
+      >
+        <EditProgressForm progress={progress} />
+      </Modal>
+    </>
   );
 }
 
-enum EnergyLevelEn {
-  Low = "low",
-  Moderate = "moderate",
-  High = "high",
-}
+type EditProps = {
+  progress: Progress;
+};
 
-function LogProgressForm() {
+function EditProgressForm({ progress }: EditProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [energyLevel, setEnergyLevel] = useState("");
   const [values, setValues] = useState<z.infer<typeof log_progress_schema>>({
@@ -75,9 +75,10 @@ function LogProgressForm() {
         progress_energyLevel: energyLevel,
       });
 
-      await log_progress({
+      await edit_progress({
         access_token,
         progress: validated_values,
+        progress_id: progress.progress_id,
       });
 
       toast({
@@ -221,37 +222,5 @@ function LogProgressForm() {
         </Button>
       </div>
     </form>
-  );
-}
-
-type SelectProps = {
-  values: string[];
-  setValue: React.Dispatch<React.SetStateAction<string>>;
-  defaultValue?: string;
-};
-
-export function EnergyLevel({ setValue, values, defaultValue }: SelectProps) {
-  return (
-    <Select onValueChange={(value) => setValue(value)}>
-      <SelectTrigger className="text-sm gap-2  group inline-flex items-center bg-white justify-between outline-none  h-fit  rounded-lg border border-slate-300 hover:bg-neutral-100 transition-all delay-75 hover:cursor-pointer py-2 px-3">
-        <SelectValue
-          placeholder="pick energy level"
-          defaultValue={defaultValue}
-        />
-      </SelectTrigger>
-      <SelectContent>
-        {values.map((value, index) => {
-          return (
-            <SelectItem
-              className="first-letter:uppercase"
-              key={index}
-              value={value}
-            >
-              {value}
-            </SelectItem>
-          );
-        })}
-      </SelectContent>
-    </Select>
   );
 }

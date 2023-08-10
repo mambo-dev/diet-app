@@ -10,6 +10,8 @@ import { db } from "../../../lib/prisma";
 import { Progress } from "@prisma/client";
 import LogProgress from "../../../components/dashboard/statistics/logprogress";
 import LogAdherence from "../../../components/dashboard/statistics/logadherence";
+import { columns } from "../../../components/dashboard/statistics/logprogresscolumns";
+import { DataTable } from "../../../components/dashboard/statistics/logprogressdatatable";
 
 type Props = {};
 
@@ -61,7 +63,9 @@ export default async function MealPlanPage({}: Props) {
             subTitle="Start tracking your progress "
           />
         ) : (
-          <div>progress</div>
+          <div className="w-full flex rounded-lg">
+            <DataTable columns={columns} data={progress} />
+          </div>
         )}
       </div>
     </div>
