@@ -72,7 +72,7 @@ export async function POST(request: Request): Promise<
       progress_notes,
       progress_weight,
       progress_waist,
-    } = log_progress_schema.parse(body);
+    } = body;
 
     await db.progress.create({
       data: {
