@@ -14,6 +14,12 @@ export async function DELETE(request: Request): Promise<
     const cookie = cookies();
 
     const access_token = cookie.get("access_token");
+    const { searchParams } = new URL(request.url);
+    const shopping_list_id = searchParams.get("shopping_list_id");
+
+    if (!shopping_list_id || isNaN(Number(shopping_list_id))) {
+      throw new Error("invalid id value sent");
+    }
 
     if (!cookie) {
       return NextResponse.json(
@@ -85,7 +91,7 @@ export async function DELETE(request: Request): Promise<
 
     await db.shoppingList.delete({
       where: {
-        shopping_list_mealplan_id: current_meal_plan.mealplan_id,
+        shopping_list_id: Number(shopping_list_id),
       },
     });
 

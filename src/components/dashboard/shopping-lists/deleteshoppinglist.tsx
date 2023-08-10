@@ -6,20 +6,22 @@ import Modal from "../../ui/modal";
 import { toast } from "../../ui/toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import delete_meal from "../../../lib/fetch/mealplan/deleteMeal";
+import delete_shopping_list from "../../../lib/fetch/shoppinglist/delete";
 
-export default function DeleteMeal({ meal_id }: { meal_id: number }) {
+export default function DeleteShoppingList({
+  shopping_list_id,
+}: {
+  shopping_list_id: number;
+}) {
   const [openWarning, setOpenWarning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  async function deleteMeal(meal_id: number) {
+  async function deleteShoppingList(shopping_list_id: number) {
     setIsLoading(true);
     try {
       const access_token = Cookies.get("access_token") ?? "";
-
-      await delete_meal(access_token, meal_id);
-
+      await delete_shopping_list(access_token, shopping_list_id);
       toast({
         title: "Success",
         message: "We have deleted this diet ",
@@ -54,7 +56,7 @@ export default function DeleteMeal({ meal_id }: { meal_id: number }) {
       <Modal
         setIsOpen={setOpenWarning}
         isOpen={openWarning}
-        title="delete meal"
+        title="delete shopping list"
       >
         <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
           <div className="sm:flex sm:items-start">
@@ -63,12 +65,11 @@ export default function DeleteMeal({ meal_id }: { meal_id: number }) {
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
               <h3 className="text-base font-semibold leading-6 text-gray-900">
-                Delete this meal
+                Delete this list
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
-                  Are you sure you want to delete? this meal this action cannot
-                  be undone.
+                  Are you sure you want to delete? this action cannot be undone.
                 </p>
               </div>
             </div>
@@ -79,7 +80,7 @@ export default function DeleteMeal({ meal_id }: { meal_id: number }) {
             type="button"
             className="inline-flex w-full justify-center gap-3 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
             onClick={() => {
-              deleteMeal(meal_id);
+              deleteShoppingList(shopping_list_id);
             }}
           >
             {isLoading ? (
