@@ -24,7 +24,7 @@ export default function DisplayShoppingLists({ shoppingLists }: Props) {
                   {index + 1}
                 </span>
                 <div className="w-fit flex items-center gap-2">
-                  <EditShoppingList shoppingListId={list.shopping_list_id} />
+                  <EditShoppingList list={list} />
                   <DeleteShoppingList
                     shopping_list_id={list.shopping_list_id}
                   />

@@ -8,12 +8,13 @@ import { DisplayListItem } from "./createshoppinglist";
 import Button from "../../ui/button";
 import SidePanel from "../../ui/sidepanel";
 import edit_shopping_list from "../../../lib/fetch/shoppinglist/edit";
+import { ShoppingList } from "@prisma/client";
 
 type Props = {
-  shoppingListId: number;
+  list: ShoppingList;
 };
 
-export default function EditShoppingList({ shoppingListId }: Props) {
+export default function EditShoppingList({ list }: Props) {
   const [openEditShoppingList, setOpenEditShoppingList] = useState(false);
 
   return (
@@ -31,8 +32,9 @@ export default function EditShoppingList({ shoppingListId }: Props) {
         isOpen={openEditShoppingList}
       >
         <EditShoppingListForm
-          shoppingListId={shoppingListId}
+          shoppingListId={list.shopping_list_id}
           setIsOpen={setOpenEditShoppingList}
+          list={list}
         />
       </SidePanel>
     </>
@@ -42,12 +44,16 @@ export default function EditShoppingList({ shoppingListId }: Props) {
 function EditShoppingListForm({
   shoppingListId,
   setIsOpen,
+  list,
 }: {
   shoppingListId: number;
+  list: ShoppingList;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [listItem, setListItem] = useState("");
-  const [listItems, setListItems] = useState<string[]>([]);
+  const [listItems, setListItems] = useState<string[]>(
+    list.shopping_list_ingridients
+  );
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   async function editShoppingList(
@@ -58,6 +64,7 @@ function EditShoppingListForm({
     setIsLoading(true);
     try {
       const access_token = Cookies.get("access_token") ?? "";
+      console.log(listItems);
       await edit_shopping_list(
         {
           shopping_items: listItems,
@@ -74,9 +81,10 @@ function EditShoppingListForm({
       router.refresh();
       setIsOpen(false);
     } catch (error) {
+      console.log(error);
       toast({
         title: "Server Error",
-        message: "failed to create shopping list",
+        message: "failed to edit shopping list",
         type: "error",
       });
     } finally {

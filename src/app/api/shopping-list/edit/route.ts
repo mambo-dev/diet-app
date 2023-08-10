@@ -6,10 +6,10 @@ import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
 
 export const edit_shopping_list = z.object({
-  ingridient_items: z
+  shopping_items: z
     .array(z.string().min(1, "please provide the food item"))
     .nonempty("you should have atleast one food item "),
-  shopping_list_id: z.string().transform((value) => Number(value)),
+  shopping_list_id: z.number(),
 });
 
 export async function PUT(request: Request): Promise<
@@ -92,39 +92,14 @@ export async function PUT(request: Request): Promise<
       );
     }
 
-    const { ingridient_items, shopping_list_id } =
-      edit_shopping_list.parse(body);
-
-    const shopping_list_items = await db.shoppingList.findUnique({
-      where: {
-        shopping_list_id,
-      },
-    });
-
-    if (!shopping_list_items) {
-      return NextResponse.json(
-        {
-          error: [
-            {
-              message: "could not find shopping list",
-            },
-          ],
-        },
-        {
-          status: 500,
-        }
-      );
-    }
+    const { shopping_items, shopping_list_id } = edit_shopping_list.parse(body);
 
     await db.shoppingList.update({
       where: {
         shopping_list_id,
       },
       data: {
-        shopping_list_ingridients: [
-          ...shopping_list_items.shopping_list_ingridients,
-          ...ingridient_items,
-        ],
+        shopping_list_ingridients: [...shopping_items],
       },
     });
 
