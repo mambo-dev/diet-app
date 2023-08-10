@@ -89,3 +89,13 @@ export const log_progress_schema = z.object({
   progress_exercise: z.string().min(1, "enter your mood to log progress"),
   progress_notes: z.string(),
 });
+
+export const log_adherence_schema = z.object({
+  diet_adherence_date: z.date({
+    required_error: "Please select a date",
+    invalid_type_error: "That's not a date!",
+  }),
+  diet_adherence_adhered: z.boolean(),
+
+  diet_adherance_notes: z.string(),
+});
