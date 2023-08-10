@@ -9,10 +9,10 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  progress: Progress;
+  progress_id: number;
 };
 
-export default function DeleteProgress({ progress }: Props) {
+export default function DeleteProgress({ progress_id }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
 
@@ -80,7 +80,7 @@ export default function DeleteProgress({ progress }: Props) {
             type="button"
             className="inline-flex w-full justify-center gap-3 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
             onClick={() => {
-              deleteProgress(progress.progress_id);
+              deleteProgress(progress_id);
             }}
           >
             {isLoading ? (

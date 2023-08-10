@@ -36,12 +36,6 @@ export default function LogProgress({}: Props) {
   );
 }
 
-enum EnergyLevelEn {
-  Low = "low",
-  Moderate = "moderate",
-  High = "high",
-}
-
 function LogProgressForm() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [energyLevel, setEnergyLevel] = useState("");

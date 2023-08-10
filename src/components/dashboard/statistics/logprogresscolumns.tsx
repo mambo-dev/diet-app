@@ -84,7 +84,7 @@ export const columns: ColumnDef<Progress>[] = [
             <Copy className="h-4 w-4" />
           </Button>
           <EditProgress progress={data} />
-          <DeleteProgress progress={data} />
+          <DeleteProgress progress_id={data.progress_id} />
         </div>
       );
     },

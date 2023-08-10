@@ -9,9 +9,9 @@ import { redirect } from "next/navigation";
 import { db } from "../../../lib/prisma";
 import { Progress } from "@prisma/client";
 import LogProgress from "../../../components/dashboard/statistics/logprogress";
-import LogAdherence from "../../../components/dashboard/statistics/logadherence";
 import { columns } from "../../../components/dashboard/statistics/logprogresscolumns";
 import { DataTable } from "../../../components/dashboard/statistics/logprogressdatatable";
+import SaveProgress from "../../../components/dashboard/statistics/saveprogress";
 
 type Props = {};
 
@@ -50,8 +50,9 @@ export default async function MealPlanPage({}: Props) {
         <Heading size="sm" className="text-slate-800">
           Progress
         </Heading>
-        <div className="w-fit flex gap-3 items-center">
+        <div className="w-1/4 flex gap-3 items-center">
           <LogProgress />
+          <SaveProgress data={progress} username={user.username} />
         </div>
       </div>
       <div className="flex flex-col w-full py-2 px-4">
