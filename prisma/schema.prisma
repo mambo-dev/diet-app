@@ -156,10 +156,17 @@ model Progress {
   progress_weight      Float
   progress_waist       Float
   progress_hips        Float
-  progress_energyLevel String
+  progress_energyLevel EnergyLevel
   progress_mood        String
   progress_exercise    String
   progress_notes       String?
   progress_user        User     @relation(fields: [progress_user_id], references: [user_id], onDelete: Cascade)
   progress_user_id     Int
+}
+
+
+enum EnergyLevel {
+  high
+  moderate
+  low
 }

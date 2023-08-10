@@ -68,3 +68,24 @@ export const add_meal_schema = z.object({
   meal_type: z.enum(["breakfast", "lunch", "dinner", "snacks"]),
   meal_day_of_week: z.string().transform((week) => new Date(week)),
 });
+
+export const log_progress_schema = z.object({
+  progress_date: z.date({
+    required_error: "Please select a date",
+    invalid_type_error: "That's not a date!",
+  }),
+  progress_weight: z.number(),
+  progress_waist: z.number(),
+  progress_hips: z.number(),
+  progress_energyLevel: z.enum(
+    ["high", "moderate", "low"],
+
+    {
+      required_error: "Please select an energy level",
+      invalid_type_error: "invalid option",
+    }
+  ),
+  progress_mood: z.string().min(1, "enter your mood to log progress"),
+  progress_exercise: z.string().min(1, "enter your mood to log progress"),
+  progress_notes: z.string(),
+});
