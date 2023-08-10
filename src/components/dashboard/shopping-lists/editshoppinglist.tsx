@@ -7,6 +7,7 @@ import { Pencil, PlusCircle } from "lucide-react";
 import { DisplayListItem } from "./createshoppinglist";
 import Button from "../../ui/button";
 import SidePanel from "../../ui/sidepanel";
+import edit_shopping_list from "../../../lib/fetch/shoppinglist/edit";
 
 type Props = {
   shoppingListId: number;
@@ -57,10 +58,16 @@ function EditShoppingListForm({
     setIsLoading(true);
     try {
       const access_token = Cookies.get("access_token") ?? "";
-
+      await edit_shopping_list(
+        {
+          shopping_items: listItems,
+          shopping_list_id: shoppingListId,
+        },
+        access_token
+      );
       toast({
         title: "Great",
-        message: "successfully created shopping list",
+        message: "successfully edited shopping list",
         type: "success",
       });
 
