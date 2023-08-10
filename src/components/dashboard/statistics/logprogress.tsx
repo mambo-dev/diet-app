@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "../../ui/select";
 import Button from "../../ui/button";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -56,7 +57,7 @@ function LogProgressForm() {
     progress_weight: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setValues({ ...values, [e.target.name]: e.target.value });
   }
@@ -65,7 +66,6 @@ function LogProgressForm() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      console.log(energyLevel);
       const access_token = Cookies.get("access_token") ?? "";
       const validated_values = log_progress_schema.parse({
         ...values,
@@ -73,11 +73,30 @@ function LogProgressForm() {
         progress_waist: Number(values.progress_waist),
         progress_weight: Number(values.progress_weight),
         progress_energyLevel: energyLevel,
+        prgoress_date: date,
       });
+      console.log(
+        "date",
+        date,
+        "validated values",
+        validated_values.progress_date
+      );
+
+      if (!date) {
+        toast({
+          message: "no set date",
+          title: "no date",
+          type: "error",
+        });
+        return;
+      }
 
       await log_progress({
         access_token,
-        progress: validated_values,
+        progress: {
+          ...validated_values,
+          progress_date: date,
+        },
       });
 
       toast({
@@ -97,6 +116,8 @@ function LogProgressForm() {
         progress_waist: 0,
         progress_weight: 0,
       });
+
+      router.refresh();
     } catch (error) {
       console.log(error);
       if (error instanceof z.ZodError) {

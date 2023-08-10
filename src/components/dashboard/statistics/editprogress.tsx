@@ -24,10 +24,10 @@ export default function EditProgress({ progress }: Props) {
   return (
     <>
       <button
-        className={buttonVariants({ variant: "ghost" })}
+        className={buttonVariants({ variant: "ghost", size: "sm" })}
         onClick={() => setOpenEditProgress(true)}
       >
-        <Pencil className="w-4 h-4" />
+        <Pencil className="w-4 h-4  text-blue-400 hover:text-blue-500" />
       </button>
       <Modal
         title="Edit progress"
@@ -72,7 +72,6 @@ function EditProgressForm({ progress, setIsOpen }: EditProps) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      console.log(date);
       const access_token = Cookies.get("access_token") ?? "";
       const validated_values = log_progress_schema.parse({
         ...values,

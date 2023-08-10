@@ -25,9 +25,7 @@ export default function SignOutButton({}: Props) {
         duration: 2000,
       });
 
-      setTimeout(() => {
-        router.refresh();
-      }, 1500);
+      router.refresh();
     } catch (error) {
       toast({
         type: "error",

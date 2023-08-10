@@ -19,7 +19,7 @@ model User {
   user_meal_plan      MealPlan[]
   user_progress       Progress[]
   user_bio_data       BioData?
-  DietAdherence       DietAdherence[]
+ 
 }
 
 model BioData {
@@ -141,14 +141,14 @@ model ShoppingList {
   shopping_list_mealplan_id Int
 }
 
-model DietAdherence {
-  diet_adherence_id      Int      @id @default(autoincrement())
-  diet_adherence_date    DateTime
-  diet_adherence_adhered Boolean
-  diet_adherance_notes   String?
-  diet_adherance_user_id Int
-  diet_adherance_user    User     @relation(fields: [diet_adherance_user_id], references: [user_id], onDelete: Cascade)
-}
+// model DietAdherence {
+//   diet_adherence_id      Int      @id @default(autoincrement())
+//   diet_adherence_date    DateTime
+//   diet_adherence_adhered Boolean
+//   diet_adherance_notes   String?
+//   diet_adherance_user_id Int
+//   diet_adherance_user    User     @relation(fields: [diet_adherance_user_id], references: [user_id], onDelete: Cascade)
+// }
 
 model Progress {
   progress_id          Int      @id @default(autoincrement())

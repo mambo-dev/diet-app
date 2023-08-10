@@ -49,7 +49,7 @@ export default function SignInPage(props: Props) {
         type: "success",
       });
 
-      router.push("/dashboard");
+      router.push("/dashboard/profile");
     } catch (error) {
       if (error instanceof Error) {
         if (error instanceof z.ZodError) {

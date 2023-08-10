@@ -14,6 +14,7 @@ import { Button } from "../../ui/shadbutton";
 import { Copy, MoreHorizontal } from "lucide-react";
 import EditProgress from "./editprogress";
 import { toast } from "../../ui/toast";
+import DeleteProgress from "./deleteprogress";
 
 export const columns: ColumnDef<Progress>[] = [
   {
@@ -21,7 +22,6 @@ export const columns: ColumnDef<Progress>[] = [
     header: "Date",
     cell: ({ row }) => {
       const date = row.getValue("progress_date");
-      console.log(date);
       const formatted = format(new Date(`${date}`), "P");
 
       return <div className="text-right font-medium">{formatted}</div>;
@@ -68,9 +68,10 @@ export const columns: ColumnDef<Progress>[] = [
       const data = row.original;
 
       return (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 group">
           <Button
             variant="ghost"
+            size={`sm`}
             onClick={() => {
               navigator.clipboard.writeText(String(notes));
               toast({
@@ -83,6 +84,7 @@ export const columns: ColumnDef<Progress>[] = [
             <Copy className="h-4 w-4" />
           </Button>
           <EditProgress progress={data} />
+          <DeleteProgress progress={data} />
         </div>
       );
     },
