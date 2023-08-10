@@ -176,8 +176,10 @@ export async function PUT(request: Request): Promise<
         { status: 404 }
       );
     }
-
-    const progress = log_progress_schema.parse(body);
+    const progress = log_progress_schema.parse({
+      ...body,
+      progress_date: new Date(`${body.progress_date}`),
+    });
 
     await db.progress.update({
       where: {

@@ -11,6 +11,9 @@ import Button from "../../ui/button";
 import Cookies from "js-cookie";
 import { edit_progress } from "../../../lib/fetch/statistics/log-progress/progress";
 import Modal from "../../ui/modal";
+import { Pencil } from "lucide-react";
+import { buttonVariants } from "../../ui/shadbutton";
+import { useRouter } from "next/navigation";
 
 type Props = {
   progress: Progress;
@@ -21,17 +24,17 @@ export default function EditProgress({ progress }: Props) {
   return (
     <>
       <button
-        className="w-full text-sm hover:bg-slate-300 rounded-md py-2 px-1 inline-flex items-start justify-center"
+        className={buttonVariants({ variant: "ghost" })}
         onClick={() => setOpenEditProgress(true)}
       >
-        Edit progress
+        <Pencil className="w-4 h-4" />
       </button>
       <Modal
         title="Edit progress"
         isOpen={openEditProgress}
         setIsOpen={setOpenEditProgress}
       >
-        <EditProgressForm progress={progress} />
+        <EditProgressForm progress={progress} setIsOpen={setOpenEditProgress} />
       </Modal>
     </>
   );
@@ -39,33 +42,37 @@ export default function EditProgress({ progress }: Props) {
 
 type EditProps = {
   progress: Progress;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function EditProgressForm({ progress }: EditProps) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+function EditProgressForm({ progress, setIsOpen }: EditProps) {
+  const [date, setDate] = useState<Date | undefined>(
+    new Date(`${progress.progress_date}`)
+  );
   const [energyLevel, setEnergyLevel] = useState("");
   const [values, setValues] = useState<z.infer<typeof log_progress_schema>>({
-    progress_date: date ?? new Date(),
     //@ts-ignore
-    progress_energyLevel: energyLevel,
-    progress_exercise: "",
-    progress_hips: 0,
-    progress_mood: "",
-    progress_notes: "",
-    progress_waist: 0,
-    progress_weight: 0,
+    progress_energyLevel:
+      !energyLevel && energyLevel.length <= 0
+        ? progress.progress_energyLevel
+        : energyLevel,
+    progress_exercise: progress.progress_exercise,
+    progress_hips: progress.progress_hips,
+    progress_mood: progress.progress_mood,
+    progress_notes: progress.progress_notes ?? "",
+    progress_waist: progress.progress_waist,
+    progress_weight: progress.progress_weight,
   });
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setValues({ ...values, [e.target.name]: e.target.value });
   }
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      console.log(energyLevel);
+      console.log(date);
       const access_token = Cookies.get("access_token") ?? "";
       const validated_values = log_progress_schema.parse({
         ...values,
@@ -73,6 +80,7 @@ function EditProgressForm({ progress }: EditProps) {
         progress_waist: Number(values.progress_waist),
         progress_weight: Number(values.progress_weight),
         progress_energyLevel: energyLevel,
+        progress_date: date,
       });
 
       await edit_progress({
@@ -98,6 +106,11 @@ function EditProgressForm({ progress }: EditProps) {
         progress_waist: 0,
         progress_weight: 0,
       });
+      setIsOpen(false);
+
+      setTimeout(() => {
+        router.refresh();
+      }, 500);
     } catch (error) {
       console.log(error);
       if (error instanceof z.ZodError) {

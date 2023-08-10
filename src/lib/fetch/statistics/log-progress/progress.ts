@@ -45,14 +45,17 @@ export async function edit_progress(
 ): Promise<boolean | undefined> {
   const { access_token, progress, progress_id } = editProgress;
 
-  const res = await fetch(`/api/statistics/log-progress?query=${progress_id}`, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json",
-      Cookie: `access_token=${access_token}`,
-    },
-    body: JSON.stringify(progress),
-  });
+  const res = await fetch(
+    `/api/statistics/log-progress?progress_id=${progress_id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+        Cookie: `access_token=${access_token}`,
+      },
+      body: JSON.stringify(progress),
+    }
+  );
 
   const data = (await res.json()) as ServerResponse<boolean>;
 
@@ -76,13 +79,16 @@ export async function delete_progress(
 ): Promise<boolean | undefined> {
   const { access_token, progress_id } = deleteProgress;
 
-  const res = await fetch(`/api/statistics/log-progress?query=${progress_id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-type": "application/json",
-      Cookie: `access_token=${access_token}`,
-    },
-  });
+  const res = await fetch(
+    `/api/statistics/log-progress?progress_id=${progress_id}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        Cookie: `access_token=${access_token}`,
+      },
+    }
+  );
 
   const data = (await res.json()) as ServerResponse<boolean>;
 
