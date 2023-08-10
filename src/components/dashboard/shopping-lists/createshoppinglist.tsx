@@ -29,13 +29,13 @@ export default function CreateShoppingList({}: Props) {
         setIsOpen={setOpenNewShoppingList}
         isOpen={openNewShoppingList}
       >
-        <CreateShoppingListForm />
+        <CreateShoppingListForm setIsOpen={setOpenNewShoppingList}/>
       </SidePanel>
     </>
   );
 }
 
-function CreateShoppingListForm() {
+function CreateShoppingListForm({setIsOpen}:{setIsOpen:React.Dispatch<React.SetStateAction<boolean>>}) {
   const [listItem, setListItem] = useState("");
   const [listItems, setListItems] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +46,15 @@ function CreateShoppingListForm() {
     try {
         const access_token = Cookies.get("access_token") ?? "";
       await create_shopping_list({ shopping_items: listItems }, access_token);
+      toast({
+        title: "Great",
+        message: "successfully created shopping list",
+        type: "success",
+      });
+      
+      router.refresh()
+      setIsOpen(false)
+      
     } catch (error) {
       toast({
         title: "Server Error",
