@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Heading from "../../ui/heading";
 import Adherence from "./adherence/adherence";
 import Progress from "./progress/progress";
+import { useRouter, usePathname, useParams } from "next/navigation";
 
 type Props = {
   progress: ProgressType[];
@@ -12,12 +13,15 @@ type Props = {
     user_id: number;
     username: string;
   };
+  tab: "progress" | "adherence";
 };
 
-export default function Reports({ progress, adherence, user }: Props) {
-  const [currentTab, setCurrentTab] = useState<"progress" | "adherence">(
-    "progress"
-  );
+export default function Reports({ progress, adherence, user, tab }: Props) {
+  const router = useRouter();
+  const params = useParams();
+  const pathname = usePathname();
+  const [currentTab, setCurrentTab] = useState<"progress" | "adherence">(tab);
+  console.log(pathname, params);
   return (
     <>
       <div className="flex w-full items-center justify-between px-4 ">
@@ -26,13 +30,19 @@ export default function Reports({ progress, adherence, user }: Props) {
         </Heading>
         <div className="w-1/4 flex gap-3 items-center">
           <button
-            onClick={() => setCurrentTab("progress")}
+            onClick={() => {
+              setCurrentTab("progress");
+              router.push("/dashboard/reports/?tab=progress");
+            }}
             className="w-full py-2 border border-slate-300 px-2 inline-flex items-center justify-center shadow-sm bg-white rounded-lg outline-none focus:shadow text-sm font-semibold text-slate-700"
           >
             Progress
           </button>
           <button
-            onClick={() => setCurrentTab("adherence")}
+            onClick={() => {
+              setCurrentTab("adherence");
+              router.push("/dashboard/reports/?tab=adherence");
+            }}
             className="w-full py-2 border border-slate-300 px-2 inline-flex items-center justify-center shadow-sm bg-white rounded-lg outline-none focus:shadow text-sm font-semibold text-slate-700"
           >
             Adherence
@@ -43,7 +53,7 @@ export default function Reports({ progress, adherence, user }: Props) {
         {currentTab === "progress" ? (
           <Progress username={user.username} progress={progress} />
         ) : (
-          <Adherence adherence={adherence} />
+          <Adherence adherence={adherence} username={user.username} />
         )}
       </div>
     </>

@@ -13,7 +13,7 @@ type Props = {
 
 export default function Progress({ progress, username }: Props) {
   return (
-    <div className="w-full flex flex-col items-center gap-3">
+    <div className="w-full flex flex-col items-center gap-3" id="progress">
       <div className="w-full justify-between mr-auto flex gap-3 items-center">
         <div className="w-fit">
           <LogProgress />

@@ -12,7 +12,10 @@ import { DietAdherence, Progress } from "@prisma/client";
 import LogAdherence from "../../../components/dashboard/statistics/adherence/logadherence";
 import Reports from "../../../components/dashboard/statistics/reports";
 
-type Props = {};
+export const metadata = {
+  title: "Healthy Haven | Reports",
+  description: "Let's help you achieve your health goals",
+};
 
 async function get_user_progress(user_id: number): Promise<{
   progress: Progress[];
@@ -46,9 +49,12 @@ async function get_user_progress(user_id: number): Promise<{
   }
 }
 
-export default async function MealPlanPage({}: Props) {
+export default async function ReportsPage({ params, searchParams }: any) {
   const cookie = cookies();
 
+  const tab = searchParams.tab
+    ? (searchParams.tab as "progress" | "adherence")
+    : "progress";
   const access_token = cookie.get("access_token");
 
   const { user, error } = await verifyAuth(access_token?.value);
@@ -61,7 +67,12 @@ export default async function MealPlanPage({}: Props) {
 
   return (
     <div className="flex py-10 w-full flex-col gap-2">
-      <Reports adherence={adherence} progress={progress} user={user} />
+      <Reports
+        adherence={adherence}
+        progress={progress}
+        user={user}
+        tab={tab}
+      />
     </div>
   );
 }
