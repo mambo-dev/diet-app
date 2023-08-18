@@ -1,10 +1,12 @@
 "use client";
-import { DietAdherence, Progress } from "@prisma/client";
+import { DietAdherence, Progress as ProgressType } from "@prisma/client";
 import React, { useState } from "react";
 import Heading from "../../ui/heading";
+import Adherence from "./adherence/adherence";
+import Progress from "./progress/progress";
 
 type Props = {
-  progress: Progress[];
+  progress: ProgressType[];
   adherence: DietAdherence[];
   user: {
     user_id: number;
@@ -20,9 +22,9 @@ export default function Reports({ progress, adherence, user }: Props) {
     <>
       <div className="flex w-full items-center justify-between px-4 ">
         <Heading size="sm" className="text-slate-800">
-          Progress/Adherence
+          {currentTab === "progress" ? "Progress" : "Adherence"}
         </Heading>
-        <div className="w-1/2 flex gap-3 items-center">
+        <div className="w-1/4 flex gap-3 items-center">
           <button
             onClick={() => setCurrentTab("progress")}
             className="w-full py-2 border border-slate-300 px-2 inline-flex items-center justify-center shadow-sm bg-white rounded-lg outline-none focus:shadow text-sm font-semibold text-slate-700"
@@ -37,7 +39,13 @@ export default function Reports({ progress, adherence, user }: Props) {
           </button>
         </div>
       </div>
-      <div className="flex flex-col w-full py-2 px-4"></div>
+      <div className="flex flex-col w-full py-2 px-4 mt-4">
+        {currentTab === "progress" ? (
+          <Progress username={user.username} progress={progress} />
+        ) : (
+          <Adherence adherence={adherence} />
+        )}
+      </div>
     </>
   );
 }

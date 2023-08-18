@@ -1,16 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import { exportToExcel } from "../../../lib/excel";
-import Button from "../../ui/button";
 import { FolderDown, Loader2 } from "lucide-react";
 import { format } from "date-fns";
+import Button from "../../ui/button";
+import { exportToExcel } from "../../../lib/excel";
 
 interface Props<Tdata> {
   username: string;
   data: Tdata;
+  type: string;
 }
 
-export default function SaveProgress<Tdata>({ username, data }: Props<Tdata>) {
+export default function SaveData<Tdata>({
+  username,
+  data,
+  type,
+}: Props<Tdata>) {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -22,7 +27,7 @@ export default function SaveProgress<Tdata>({ username, data }: Props<Tdata>) {
         exportToExcel({
           //@ts-ignore
           Dbdata: data,
-          filename: `${username}-${format(new Date(), "T")}-progress`,
+          filename: `${username}-${format(new Date(), "T")}-${type}`,
           filetype:
             "application/vnd.openxmlfromats-officedocument.spreadsheetml.sheet;charset=UTF-8",
           fileExtension: ".xlsx",

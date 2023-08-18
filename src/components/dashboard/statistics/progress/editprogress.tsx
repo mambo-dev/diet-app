@@ -2,17 +2,17 @@
 import { Progress } from "@prisma/client";
 import React, { useState } from "react";
 import { z } from "zod";
-import { log_progress_schema } from "../../../lib/schemas/schemas";
-import { toast } from "../../ui/toast";
-import { DatePicker } from "../../ui/datepicker";
-import { Input } from "../../ui/input";
+import { log_progress_schema } from "../../../../lib/schemas/schemas";
+import { toast } from "../../../ui/toast";
+import { DatePicker } from "../../../ui/datepicker";
+import { Input } from "../../../ui/input";
 import { EnergyLevel } from "./logprogress";
-import Button from "../../ui/button";
+import Button from "../../../ui/button";
 import Cookies from "js-cookie";
-import { edit_progress } from "../../../lib/fetch/statistics/log-progress/progress";
-import Modal from "../../ui/modal";
+import { edit_progress } from "../../../../lib/fetch/statistics/log-progress/progress";
+import Modal from "../../../ui/modal";
 import { Pencil } from "lucide-react";
-import { buttonVariants } from "../../ui/shadbutton";
+import { buttonVariants } from "../../../ui/shadbutton";
 import { useRouter } from "next/navigation";
 
 type Props = {

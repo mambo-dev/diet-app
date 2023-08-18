@@ -2,21 +2,15 @@
 import { Progress } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
-import { Button } from "../../ui/shadbutton";
+
 import { Copy, MoreHorizontal } from "lucide-react";
 import EditProgress from "./editprogress";
-import { toast } from "../../ui/toast";
-import DeleteProgress from "./deleteprogress";
 
-export const columns: ColumnDef<Progress>[] = [
+import DeleteProgress from "./deleteprogress";
+import Button from "../../../ui/button";
+import { toast } from "../../../ui/toast";
+
+export const progressColumns: ColumnDef<Progress>[] = [
   {
     accessorKey: "progress_date",
     header: "Date",

@@ -1,3 +1,4 @@
+"use client";
 import { DietAdherence } from "@prisma/client";
 import React from "react";
 

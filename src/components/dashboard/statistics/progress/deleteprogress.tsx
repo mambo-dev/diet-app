@@ -1,10 +1,9 @@
-import { AlertTriangle, Loader2, Pencil, Trash2 } from "lucide-react";
-import Modal from "../../ui/modal";
+import { AlertTriangle, Loader2, Trash2 } from "lucide-react";
+import Modal from "../../../ui/modal";
 import { useState } from "react";
-import { Progress } from "@prisma/client";
-import { buttonVariants } from "../../ui/button";
-import { toast } from "../../ui/toast";
-import { delete_progress } from "../../../lib/fetch/statistics/log-progress/progress";
+import { buttonVariants } from "../../../ui/button";
+import { toast } from "../../../ui/toast";
+import { delete_progress } from "../../../../lib/fetch/statistics/log-progress/progress";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
