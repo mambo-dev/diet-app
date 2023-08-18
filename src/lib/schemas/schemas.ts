@@ -95,7 +95,7 @@ export const log_adherence_schema = z.object({
     required_error: "Please select a date",
     invalid_type_error: "That's not a date!",
   }),
-  diet_adherence_adhered: z.boolean(),
+  diet_adherence_status: z.boolean(),
 
-  diet_adherance_notes: z.string(),
+  diet_adherence_notes: z.string(),
 });

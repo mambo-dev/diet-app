@@ -2,13 +2,13 @@ import { log_adherence_schema } from "../../../schemas/schemas";
 import { ServerResponse } from "../../../type";
 import { z } from "zod";
 
-interface ILogProgress {
+interface ILogAdherence {
   access_token: string;
   adherence: z.infer<typeof log_adherence_schema>;
 }
 
 export async function log_adherence(
-  logAdherence: ILogProgress
+  logAdherence: ILogAdherence
 ): Promise<boolean | undefined> {
   const { access_token, adherence } = logAdherence;
 
@@ -33,14 +33,14 @@ export async function log_adherence(
   return data.data;
 }
 
-type IEditProgress = {
+type IEditAdherence = {
   access_token: string;
   adherence: z.infer<typeof log_adherence_schema>;
   adherence_id: number;
 };
 
 export async function edit_adherence(
-  editProgress: IEditProgress
+  editProgress: IEditAdherence
 ): Promise<boolean | undefined> {
   const { access_token, adherence, adherence_id } = editProgress;
 
@@ -68,13 +68,13 @@ export async function edit_adherence(
   return data.data;
 }
 
-type IDeleteProgress = {
+type IDeleteAdherence = {
   access_token: string;
   adherence_id: number;
 };
 
 export async function delete_adherence(
-  deleteProgress: IDeleteProgress
+  deleteProgress: IDeleteAdherence
 ): Promise<boolean | undefined> {
   const { access_token, adherence_id } = deleteProgress;
 

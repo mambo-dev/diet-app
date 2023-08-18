@@ -138,12 +138,12 @@ model Progress {
 }
 
 model DietAdherence {
-  adherence_id      Int      @id @default(autoincrement())
-  adherence_user    User     @relation(fields: [adherence_user_id], references: [user_id], onDelete: Cascade)
-  adherence_user_id Int
-  adherence_status  Boolean
-  adherance_date    DateTime @default(now())
-  adherance_notes   String?
+  diet_adherence_id      Int      @id @default(autoincrement())
+  diet_adherence_user    User     @relation(fields: [diet_adherence_user_id], references: [user_id], onDelete: Cascade)
+  diet_adherence_user_id Int
+  diet_adherence_status  Boolean
+  diet_adherence_date    DateTime @default(now())
+  diet_adherence_notes   String?
 }
 
 enum EnergyLevel {
