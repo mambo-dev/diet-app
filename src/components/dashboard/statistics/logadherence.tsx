@@ -9,6 +9,7 @@ import { toast } from "../../ui/toast";
 import { log_adherence_schema } from "../../../lib/schemas/schemas";
 import { log_adherence } from "../../../lib/fetch/statistics/log-adherence/adherence";
 import Cookies from "js-cookie";
+import Button from "../../ui/button";
 
 type Props = {};
 
@@ -82,7 +83,7 @@ function LogAdherenceForm({}) {
 
       toast({
         message:
-          "You did everything right - but we could not log your progress",
+          "You did everything right - but we could not log your adherence.",
         title: "Server Error",
         type: "error",
       });
@@ -96,7 +97,6 @@ function LogAdherenceForm({}) {
       className="w-full flex items-center flex-col gap-2 "
       onSubmit={handleAdherence}
     >
-      <h1>{adherenceNotes}</h1>
       <div className="w-full  grid grid-cols-4 items-start gap-3 justify-between">
         <label>date</label>
         <div className="flex-1 w-full col-span-3">
@@ -104,11 +104,11 @@ function LogAdherenceForm({}) {
         </div>
       </div>
       <div className="w-full  grid grid-cols-4 items-start gap-3 justify-between">
-        <label>followed diet plan ?</label>
+        <label>adhered</label>
         <div className="flex-1 w-full col-span-3">
           <input
             type="checkbox"
-            className={`h-10 w-10 border border-gray-200 focus:border-green-400 focus:hover:ring-1 ring-green-300 ring-offset-1  `}
+            className={`h-6 rounded-md w-full border border-gray-300 bg-white py-2 px-3 focus:border-green-400 accent-green-600  ring-offset-1  `}
             onChange={(e) => setAdherenceStatus(e.target.checked)}
           />
         </div>
@@ -124,6 +124,17 @@ function LogAdherenceForm({}) {
             placeholder="ate more snacks..."
           />
         </div>
+      </div>
+      <div className="w-28 ml-auto">
+        <Button
+          size="sm"
+          variant="default"
+          isLoading={isLoading}
+          //@ts-ignore
+          type="submit"
+        >
+          save
+        </Button>
       </div>
     </form>
   );

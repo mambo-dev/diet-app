@@ -66,18 +66,18 @@ export async function POST(request: Request): Promise<
       );
     }
 
-    const {
-      diet_adherance_notes,
-      diet_adherence_adhered,
-      diet_adherence_date,
-    } = log_adherence_schema.parse(body);
+    const { diet_adherence_notes, diet_adherence_status, diet_adherence_date } =
+      log_adherence_schema.parse({
+        ...body,
+        diet_adherence_date: new Date(`${body.diet_adherence_date}`),
+      });
 
     await db.dietAdherence.create({
       data: {
-        diet_adherence_adhered,
-        diet_adherance_notes,
+        diet_adherence_status,
+        diet_adherence_notes,
         diet_adherence_date,
-        diet_adherance_user: {
+        diet_adherence_user: {
           connect: {
             user_id: user.user_id,
           },
@@ -170,21 +170,21 @@ export async function PUT(request: Request): Promise<
       );
     }
 
-    const {
-      diet_adherance_notes,
-      diet_adherence_adhered,
-      diet_adherence_date,
-    } = log_adherence_schema.parse(body);
+    const { diet_adherence_notes, diet_adherence_status, diet_adherence_date } =
+      log_adherence_schema.parse({
+        ...body,
+        diet_adherence_date: new Date(`${body.diet_adherence_date}`),
+      });
 
     await db.dietAdherence.update({
       where: {
         diet_adherence_id: Number(adherence_id),
       },
       data: {
-        diet_adherence_adhered,
-        diet_adherance_notes,
+        diet_adherence_status,
+        diet_adherence_notes,
         diet_adherence_date,
-        diet_adherance_user: {
+        diet_adherence_user: {
           connect: {
             user_id: user.user_id,
           },

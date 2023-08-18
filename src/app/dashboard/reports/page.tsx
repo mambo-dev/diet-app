@@ -12,6 +12,7 @@ import LogProgress from "../../../components/dashboard/statistics/logprogress";
 import { columns } from "../../../components/dashboard/statistics/logprogresscolumns";
 import { DataTable } from "../../../components/dashboard/statistics/logprogressdatatable";
 import SaveProgress from "../../../components/dashboard/statistics/saveprogress";
+import LogAdherence from "../../../components/dashboard/statistics/logadherence";
 
 type Props = {};
 
@@ -48,10 +49,11 @@ export default async function MealPlanPage({}: Props) {
     <div className="flex py-10 w-full flex-col gap-2">
       <div className="flex w-full items-center justify-between px-4 ">
         <Heading size="sm" className="text-slate-800">
-          Progress
+          Progress/Adherence
         </Heading>
-        <div className="w-1/4 flex gap-3 items-center">
+        <div className="w-1/2 flex gap-3 items-center">
           <LogProgress />
+          <LogAdherence />
           <SaveProgress data={progress} username={user.username} />
         </div>
       </div>

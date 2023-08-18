@@ -13,14 +13,18 @@ export default async function get_diet_plan(): Promise<{
 
   const access_token = cookie.get("access_token");
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/diet-plan/get-diet-plan`, {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-      Cookie: `access_token=${access_token?.value}`,
-    },
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/diet-plan/get-diet-plan`,
+    {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Cookie: `access_token=${access_token?.value}`,
+      },
+      credentials: "include",
+      cache: "default",
+    }
+  );
 
   const data = (await res.json()) as ServerResponse<{
     data?: DietPlan & {
