@@ -29,6 +29,9 @@ async function get_user_progress(user_id: number): Promise<{
           user_id,
         },
       },
+      orderBy: {
+        progress_date: "asc",
+      },
     });
 
     const adherence = await db.dietAdherence.findMany({
@@ -37,6 +40,9 @@ async function get_user_progress(user_id: number): Promise<{
         diet_adherence_user: {
           user_id,
         },
+      },
+      orderBy: {
+        diet_adherence_date: "asc",
       },
     });
 
