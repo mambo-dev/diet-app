@@ -12,6 +12,7 @@ import sign_up from "../../../lib/fetch/signup";
 import sign_in from "../../../lib/fetch/signin";
 import { useRouter } from "next/navigation";
 import { HandleError } from "../../../lib/type";
+import Link from "next/link";
 
 type Props = {};
 
@@ -153,6 +154,16 @@ export default function SignUpPage(props: Props) {
           >
             sign up
           </Button>
+          <p className="text-sm ml-auto text-slate-600 font-medium">
+            already have an account?
+            <Link
+              href="/auth/signin"
+              className="text-green-500 hover:underline"
+            >
+              {" "}
+              sign in{" "}
+            </Link>
+          </p>
         </form>
       </div>
       <div className="hidden md:flex relative h-screen w-[40%]">

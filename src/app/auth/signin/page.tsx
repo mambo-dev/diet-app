@@ -11,6 +11,7 @@ import sign_in from "../../../lib/fetch/signin";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../../lib/schemas/schemas";
 import { HandleError } from "../../../lib/type";
+import Link from "next/link";
 
 type Props = {};
 
@@ -130,6 +131,16 @@ export default function SignInPage(props: Props) {
           >
             sign in
           </Button>
+          <p className="text-sm ml-auto text-slate-600 font-medium">
+            don&apos;t have an account?
+            <Link
+              href="/auth/signup"
+              className="text-green-500 hover:underline"
+            >
+              {" "}
+              sign up{" "}
+            </Link>
+          </p>
         </form>
       </div>
       <div className="hidden md:flex relative h-screen w-[40%]">

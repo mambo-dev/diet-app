@@ -11,15 +11,14 @@ datasource db {
 }
 
 model User {
-  user_id             Int              @id @default(autoincrement())
-  user_username       String           @unique
-  user_password       String
-  user_diet_plan      DietPlan?
-  user_customizedmeal CustomizedMeal[]
-  user_meal_plan      MealPlan[]
-  user_progress       Progress[]
-  user_bio_data       BioData?
- 
+  user_id        Int             @id @default(autoincrement())
+  user_username  String          @unique
+  user_password  String
+  user_diet_plan DietPlan?
+  user_meal_plan MealPlan[]
+  user_progress  Progress[]
+  user_adherence DietAdherence[]
+  user_bio_data  BioData?
 }
 
 model BioData {
@@ -75,30 +74,18 @@ enum DietType {
 }
 
 model Food {
-  food_id              Int              @id @default(autoincrement())
-  food_nix_api_id      String           @unique
-  food_name            String
-  food_calories        Float
-  food_carbohydrates   Float
-  food_proteins        Float
-  food_fats            Float
-  food_vitamins        String[]
-  food_customized_meal CustomizedMeal[]
-  food_diet_plan       DietPlan         @relation(fields: [food_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
-  food_diet_plan_id    Int
-  Meal                 Meal?            @relation(fields: [mealMeal_id], references: [meal_id])
-  mealMeal_id          Int?
-}
-
-model CustomizedMeal {
-  customizedmeal_id            Int       @id @default(autoincrement())
-  customizedmeal_user          User      @relation(fields: [customizedmeal_user_id], references: [user_id], onDelete: Cascade)
-  customizedmeal_user_id       Int
-  customizedmeal_food          Food      @relation(fields: [customizedmeal_food_id], references: [food_id], onDelete: Cascade)
-  customizedmeal_food_id       Int
-  customizedmeal_portion_size  Float
-  customizedmeal_meal_plan     MealPlan? @relation(fields: [customized_meal_meal_plan_id], references: [mealplan_id], onDelete: Cascade)
-  customized_meal_meal_plan_id Int?
+  food_id            Int      @id @default(autoincrement())
+  food_nix_api_id    String   @unique
+  food_name          String
+  food_calories      Float
+  food_carbohydrates Float
+  food_proteins      Float
+  food_fats          Float
+  food_vitamins      String[]
+  food_diet_plan     DietPlan @relation(fields: [food_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
+  food_diet_plan_id  Int
+  Meal               Meal?    @relation(fields: [mealMeal_id], references: [meal_id])
+  mealMeal_id        Int?
 }
 
 model Meal {
@@ -118,20 +105,15 @@ enum MealType {
 }
 
 model MealPlan {
-  mealplan_id             Int              @id @default(autoincrement())
-  mealplan_user           User             @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
-  mealplan_user_id        Int
-  mealplan_diet_plan      DietPlan         @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
-  mealplan_diet_plan_id   Int              @unique
-  mealplan_start          DateTime
-  mealplan_end            DateTime
-  mealplan_customizedMeal CustomizedMeal[]
-  mealplan_meal           Meal[]
-  mealplan_shopping_list  ShoppingList[]
-}
-
-model SavedMealPlan {
-  savedmealplan_id Int @id @default(autoincrement())
+  mealplan_id            Int            @id @default(autoincrement())
+  mealplan_user          User           @relation(fields: [mealplan_user_id], references: [user_id], onDelete: Cascade)
+  mealplan_user_id       Int
+  mealplan_diet_plan     DietPlan       @relation(fields: [mealplan_diet_plan_id], references: [dietplan_id], onDelete: Cascade)
+  mealplan_diet_plan_id  Int            @unique
+  mealplan_start         DateTime
+  mealplan_end           DateTime
+  mealplan_meal          Meal[]
+  mealplan_shopping_list ShoppingList[]
 }
 
 model ShoppingList {
@@ -141,17 +123,8 @@ model ShoppingList {
   shopping_list_mealplan_id Int
 }
 
-// model DietAdherence {
-//   diet_adherence_id      Int      @id @default(autoincrement())
-//   diet_adherence_date    DateTime
-//   diet_adherence_adhered Boolean
-//   diet_adherance_notes   String?
-//   diet_adherance_user_id Int
-//   diet_adherance_user    User     @relation(fields: [diet_adherance_user_id], references: [user_id], onDelete: Cascade)
-// }
-
 model Progress {
-  progress_id          Int      @id @default(autoincrement())
+  progress_id          Int         @id @default(autoincrement())
   progress_date        DateTime
   progress_weight      Float
   progress_waist       Float
@@ -160,10 +133,18 @@ model Progress {
   progress_mood        String
   progress_exercise    String
   progress_notes       String?
-  progress_user        User     @relation(fields: [progress_user_id], references: [user_id], onDelete: Cascade)
+  progress_user        User        @relation(fields: [progress_user_id], references: [user_id], onDelete: Cascade)
   progress_user_id     Int
 }
 
+model DietAdherence {
+  adherence_id      Int      @id @default(autoincrement())
+  adherence_user    User     @relation(fields: [adherence_user_id], references: [user_id], onDelete: Cascade)
+  adherence_user_id Int
+  adherence_status  Boolean
+  adherance_date    DateTime @default(now())
+  adherance_notes   String?
+}
 
 enum EnergyLevel {
   high
