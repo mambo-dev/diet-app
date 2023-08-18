@@ -30,7 +30,7 @@ async function get_user_progress(user_id: number): Promise<{
         },
       },
       orderBy: {
-        progress_date: "asc",
+        progress_date: "desc",
       },
     });
 
@@ -42,7 +42,7 @@ async function get_user_progress(user_id: number): Promise<{
         },
       },
       orderBy: {
-        diet_adherence_date: "asc",
+        diet_adherence_date: "desc",
       },
     });
 

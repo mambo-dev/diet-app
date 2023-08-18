@@ -21,7 +21,6 @@ export default function Reports({ progress, adherence, user, tab }: Props) {
   const params = useParams();
   const pathname = usePathname();
   const [currentTab, setCurrentTab] = useState<"progress" | "adherence">(tab);
-  console.log(pathname, params);
   return (
     <>
       <div className="flex w-full items-center justify-between px-4 ">
