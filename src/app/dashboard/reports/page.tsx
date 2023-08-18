@@ -7,18 +7,20 @@ import { cookies } from "next/headers";
 import verifyAuth from "../../../lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "../../../lib/prisma";
-import { Progress } from "@prisma/client";
-import LogProgress from "../../../components/dashboard/statistics/logprogress";
-import { columns } from "../../../components/dashboard/statistics/logprogresscolumns";
-import { DataTable } from "../../../components/dashboard/statistics/logprogressdatatable";
-import SaveProgress from "../../../components/dashboard/statistics/saveprogress";
-import LogAdherence from "../../../components/dashboard/statistics/logadherence";
+import { DietAdherence, Progress } from "@prisma/client";
+
+import LogAdherence from "../../../components/dashboard/statistics/adherence/logadherence";
+import Reports from "../../../components/dashboard/statistics/reports";
 
 type Props = {};
 
-async function get_user_progress(user_id: number): Promise<Progress[]> {
+async function get_user_progress(user_id: number): Promise<{
+  progress: Progress[];
+  adherence: DietAdherence[];
+}> {
   try {
     const progress = await db.progress.findMany({
+      take: 10,
       where: {
         progress_user: {
           user_id,
@@ -26,7 +28,19 @@ async function get_user_progress(user_id: number): Promise<Progress[]> {
       },
     });
 
-    return progress;
+    const adherence = await db.dietAdherence.findMany({
+      take: 10,
+      where: {
+        diet_adherence_user: {
+          user_id,
+        },
+      },
+    });
+
+    return {
+      progress,
+      adherence,
+    };
   } catch (error) {
     throw new Error("could not get user progress");
   }
@@ -43,34 +57,11 @@ export default async function MealPlanPage({}: Props) {
     redirect("/auth/signin");
   }
 
-  const progress = await get_user_progress(user.user_id);
+  const { progress, adherence } = await get_user_progress(user.user_id);
 
   return (
     <div className="flex py-10 w-full flex-col gap-2">
-      <div className="flex w-full items-center justify-between px-4 ">
-        <Heading size="sm" className="text-slate-800">
-          Progress/Adherence
-        </Heading>
-        <div className="w-1/2 flex gap-3 items-center">
-          <LogProgress />
-          <LogAdherence />
-          <SaveProgress data={progress} username={user.username} />
-        </div>
-      </div>
-      <div className="flex flex-col w-full py-2 px-4">
-        {progress.length < 0 ? (
-          <EmptyState
-            action={<GenerateMealPlan />}
-            icon={<FolderPlus className=" w-14 h-14 " />}
-            title="No progress logged yet"
-            subTitle="Start tracking your progress "
-          />
-        ) : (
-          <div className="w-full flex rounded-lg">
-            <DataTable columns={columns} data={progress} />
-          </div>
-        )}
-      </div>
+      <Reports adherence={adherence} progress={progress} user={user} />
     </div>
   );
 }
