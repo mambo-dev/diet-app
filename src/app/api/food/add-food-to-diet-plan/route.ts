@@ -9,10 +9,7 @@ import { db } from "../../../../lib/prisma";
 
 import get_food from "../../../../lib/food/fetch-food";
 import save_food from "../../../../lib/food/save-food";
-
-export const addFoodSchema = z.object({
-  id: z.string().min(1, "the food id should be provided"),
-});
+import { addFoodSchema } from "../../../../lib/schemas/schemas";
 
 export async function POST(request: Request): Promise<
   NextResponse<{

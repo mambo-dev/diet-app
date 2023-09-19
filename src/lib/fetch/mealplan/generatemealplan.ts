@@ -4,16 +4,13 @@ export default async function generate_meal_plan(): Promise<{
   data?: boolean;
   error?: HandleError | HandleError[];
 }> {
-  const res = await fetch(
-    `http://localhost:3000/api/meal-plan/generate-meal-plan`,
-    {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-      credentials: "include",
-    }
-  );
+  const res = await fetch(`/api/meal-plan/generate-meal-plan`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+    },
+    credentials: "include",
+  });
 
   const data = (await res.json()) as ServerResponse<{
     data?: boolean;

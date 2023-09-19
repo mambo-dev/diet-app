@@ -1,4 +1,3 @@
-"use server";
 import React from "react";
 import verifyAuth from "../../../lib/auth";
 import Heading from "../../../components/ui/heading";

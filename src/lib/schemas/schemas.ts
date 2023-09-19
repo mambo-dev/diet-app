@@ -99,3 +99,7 @@ export const log_adherence_schema = z.object({
 
   diet_adherence_notes: z.string(),
 });
+
+export const addFoodSchema = z.object({
+  id: z.string().min(1, "the food id should be provided"),
+});

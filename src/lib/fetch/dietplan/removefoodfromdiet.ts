@@ -5,7 +5,7 @@ export default async function remove_food_from_diet(removeParams: {
   food_id: number;
 }) {
   const res = await fetch(
-    `http://localhost:3000/api/food/remove-food-from-plan?food_id=${removeParams.food_id}`,
+    `/api/food/remove-food-from-plan?food_id=${removeParams.food_id}`,
     {
       method: "DELETE",
       headers: {

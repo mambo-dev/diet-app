@@ -94,7 +94,7 @@ export default async function SideBar({}: Props) {
   const { bio_data, error } = await fetch_bio_data();
 
   return (
-    <div className="w-[300px] h-full">
+    <div className="w-[300px] h-full min-h-screen">
       <div className="h-[250px] bg-gray-900 flex text-slate-100 flex-col items-start justify-center px-3">
         <Heading size="xs" className="text-slate-50 text-sm flex">
           Healthy<p className="text-green-500">Haven</p>
@@ -125,7 +125,7 @@ export default async function SideBar({}: Props) {
         <ul className="w-full flex items-center justify-center flex-col">
           {NavLinks.map((link) => {
             return (
-              <Link
+              <a
                 href={link.link}
                 key={link.name}
                 className="py-4 hover:bg-white flex px-5 w-full "
@@ -134,7 +134,7 @@ export default async function SideBar({}: Props) {
                   {link.icon}
                   {link.name}
                 </li>
-              </Link>
+              </a>
             );
           })}
         </ul>
