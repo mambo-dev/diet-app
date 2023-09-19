@@ -4,13 +4,7 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
-
-export const edit_shopping_list = z.object({
-  shopping_items: z
-    .array(z.string().min(1, "please provide the food item"))
-    .nonempty("you should have atleast one food item "),
-  shopping_list_id: z.number(),
-});
+import { edit_shopping_list } from "../../../../lib/schemas/schemas";
 
 export async function PUT(request: Request): Promise<
   NextResponse<{

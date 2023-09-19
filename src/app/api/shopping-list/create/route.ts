@@ -4,12 +4,7 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import verifyAuth from "../../../../lib/auth";
 import { db } from "../../../../lib/prisma";
-
-export const create_shopping_list = z.object({
-  shopping_items: z
-    .array(z.string().min(1, "please provide the food item"))
-    .nonempty("you should have atleast one food item "),
-});
+import { create_shopping_list } from "../../../../lib/schemas/schemas";
 
 export async function POST(request: Request): Promise<
   NextResponse<{
@@ -111,7 +106,7 @@ export async function POST(request: Request): Promise<
       { status: 200 }
     );
   } catch (error) {
-  console.log(error)
+    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {

@@ -103,3 +103,14 @@ export const log_adherence_schema = z.object({
 export const addFoodSchema = z.object({
   id: z.string().min(1, "the food id should be provided"),
 });
+export const create_shopping_list = z.object({
+  shopping_items: z
+    .array(z.string().min(1, "please provide the food item"))
+    .nonempty("you should have atleast one food item "),
+});
+export const edit_shopping_list = z.object({
+  shopping_items: z
+    .array(z.string().min(1, "please provide the food item"))
+    .nonempty("you should have atleast one food item "),
+  shopping_list_id: z.number(),
+});
