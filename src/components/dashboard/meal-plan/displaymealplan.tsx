@@ -38,6 +38,7 @@ export default function DisplayMealPlan({ meal_plan }: Props) {
       </div>
       {openAddNewMeal && <AddNewMeal meal_plan={meal_plan} />}
       {meal_plan.mealplan_meal.length > 0 && (
+        //@ts-ignore
         <DisplayMeals meals={meal_plan.mealplan_meal} />
       )}
     </div>
