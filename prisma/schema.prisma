@@ -120,7 +120,7 @@ model ShoppingList {
   shopping_list_id          Int      @id @default(autoincrement())
   shopping_list_ingridients String[]
   shopping_list_mealplan    MealPlan @relation(fields: [shopping_list_mealplan_id], references: [mealplan_id], onDelete: Cascade)
-  shopping_list_mealplan_id Int
+  shopping_list_mealplan_id Int      @unique
 }
 
 model Progress {
